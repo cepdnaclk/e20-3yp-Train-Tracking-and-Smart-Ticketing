@@ -1,30 +1,36 @@
 {
+    "title": "Train Tracking and Smart Ticketing",
     "team": [
         {
-            "name": "Team Member Name 1",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx"
+            "name": "Dissanayaka D.M.N.H",
+            "email": "e20078@eng.pdn.ac.lk",
+            "eNumber": "E/20/078"
         },
         {
-            "name": "Team Member Name 2",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx"
+            "name": "Perera K.M.S.",
+            "email": "e20286@eng.pdn.ac.lk",
+            "eNumber": "E/20/286"
         },
         {
-            "name": "Team Member Name 3",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx"
+            "name": "Peris T.M.S.U.",
+            "email": "e20284@eng.pdn.ac.lk",
+            "eNumber": "E/20/284"
+        },
+        {
+            "name": "Panawenna L.S.",
+            "email": "e20279@eng.pdn.ac.lk",
+            "eNumber": "E/20/279"
         }
     ],
     "supervisors": [
         {
-            "name": "Dr. Supervisor 1",
-            "email": "email@eng.pdn.ac.lk"
-        },
-        {
-            "name": "Supervisor 2",
-            "email": "email@eng.pdn.ac.lk"
+            "name": "Dr. Isuru Nawinne",
+            "email": "isurunawinne@eng.pdn.ac.lk"
         }
     ],
-    "tags": ["Web", "Embedded Systems"]
+    "tags": [
+        "Web",
+        "Embedded Systems",
+        "Network Security"
+    ]
 }
