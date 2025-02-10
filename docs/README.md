@@ -3,8 +3,8 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and project title
-repository-name: eYY-3yp-project-template
-title: Project Template
+repository-name: e20-3yp-Train-Tracking-and-Smart-Ticketing
+title: Train Tracking and Smart Ticketing
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
@@ -14,9 +14,10 @@ title: Project Template
 ---
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  E/20/286, Milinda Sachinthaka, [email](e20286@eng.pdn.ac.lk)
+-  E/20/078, Nadeeka Disanayaka, [email](e20078@eng.pdn.ac.lk)
+-  E/20/284, Sandalu Umayanga, [email](e20284@eng.pdn.ac.lk)
+-  E/20/279, Lashan Panawenna, [email](e20279@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
