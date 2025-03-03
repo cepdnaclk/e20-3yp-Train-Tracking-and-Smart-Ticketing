@@ -153,3 +153,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'api.User'  # Replace 'your_app_name' with the actual app name
+AUTH_USER_MODEL = 'api.User'
