@@ -13,8 +13,8 @@
             <ul>
                 <li><a href="#introduction">Introduction</a></li>
                 <li><a href="#features">Features</a></li>
-                <li><a href="#architecture">Solution Architecture</a></li>
-                <li><a href="#hardware-software">Hardware & Software</a></li>
+                <li><a href="#solution-architecture">Solution Architecture</a></li>
+                <li><a href="#hardware-software1">Hardware & Software</a></li>
                 <li><a href="#testing">Testing</a></li>
                 <li><a href="#budget">Budget</a></li>
                 <li><a href="#team">Team</a></li>
@@ -43,34 +43,48 @@
         <section id="features">
             <div class="section-container_f">
                 <h2>Features</h2>
-                <h4>Functional Requirements</h4>
+        
+                <h3>1. Smart Ticketing System</h3>
                 <ul>
-                    <li><strong>Smart Ticketing System:</strong>
-                        <ul>
-                            <li>Card-based ticketing</li>
-                        </ul>
-                    </li>
-                    <li><strong>Transaction Records Management:</strong>
-                        <ul>
-                            <li>Storing customer recharge history</li>
-                            <li>Recording fee transactions with timestamps</li>
-                        </ul>
-                    </li>
-                    <li><strong>Real-Time Train Tracking:</strong>
-                        <ul>
-                            <li>Live updates on train locations</li>
-                            <li>Notifications for upcoming stations and delays</li>
-                        </ul>
-                    </li>
+                    <li><strong>Card-Based Ticketing:</strong> Customers tap their smart card to enter and exit stations.</li>
+                    <li><strong>Automated Fare Deduction:</strong> Checks balance before entry and deducts fare upon exit.</li>
+                    <li><strong>Secure Authentication:</strong> Verifies passengers before granting access.</li>
                 </ul>
-            
-                <h4>Non-Functional Requirements</h4>
+        
+                <h3>2. Role-Based Dashboard</h3>
                 <ul>
-                    <li><strong>Dependability:</strong> Reliable ticketing and real-time tracking</li>
-                    <li><strong>Efficiency:</strong> Quick transactions and seamless train updates</li>
-                    <li><strong>Scalability:</strong> System expansion to more stations</li>
-                    <li><strong>Security:</strong> Secure transactions and card validation</li>
-                    <li><strong>User Experience:</strong> Simple, intuitive interface</li>
+                    <li><strong>Customer Dashboard:</strong> Displays travel history and balance.</li>
+                    <li><strong>Station Dashboard:</strong> Enables station staff to monitor check-ins, train schedules.</li>
+                </ul>
+        
+                <h3>3. Real-Time Train Tracking & Notifications</h3>
+                <ul>
+                    <li><strong>Live Train Location Updates:</strong> Provides real-time train tracking for passengers.</li>
+                    <li><strong>Delay Notifications:</strong> Alerts users about train delays or schedule changes.</li>
+                </ul>
+        
+                <h3>4. Transaction Management & Fare Calculation</h3>
+                <ul>
+                    <li><strong>Transaction Logging:</strong> Records entry, exit, and fare deductions.</li>
+                    <li><strong>Recharge History:</strong> Stores passenger top-up transactions.</li>
+                </ul>
+        
+                <h3>5. Seamless User Experience</h3>
+                <ul>
+                    <li><strong>Contactless Entry & Exit:</strong> Passengers tap their card at gates for smooth access.</li>
+                    <li><strong>Intuitive Web Interface:</strong> User-friendly portal for passengers and station operators.</li>
+                </ul>
+        
+                <h3>6. Secure & Scalable System</h3>
+                <ul>
+                    <li><strong>Data Encryption & Security:</strong> .....</li>
+                    <li><strong>Scalability:</strong> System can expand to more railway lines and stations.</li>
+                </ul>
+        
+                <h3>7. Backend & Technology Stack</h3>
+                <ul>
+                    <li><strong>Django & React-Based System:</strong> Combines Django (backend) and React (frontend) for smooth performance.</li>
+                    <li><strong>Database Management:</strong> Efficiently stores user data, transactions, and train schedules.</li>
                 </ul>
             </div>
         </section>
@@ -89,9 +103,14 @@
     <section id="hardware-software1">
         <div class="section-container">
             <section id="hardware-software">
+                <h2>Hardware</h2>
                 <div class="hardware">
-                    <h2>Hardware</h2>
-                    <p>Details about the hardware aspects...</p>
+                    <img src="h1.jpg" alt="Image 1">
+                    <img src="h2.jpg" alt="Image 1">
+                    <img src="h3.png" alt="Image 1">
+                    <img src="h4.jpg" alt="Image 1">
+                    <img src="h5.jpg" alt="Image 1">
+                    <img src="h6.jpg" alt="Image 1">
                 </div>
                 <div class="software">
                     <h2>Software</h2>
@@ -99,8 +118,12 @@
                     <p>Our software revolutionizes Sri Lanka’s railway ticketing system by introducing a <strong>smart card-based ticketing solution</strong> that ensures seamless and efficient travel. This <strong>role-based system</strong> provides two dashboards:</p>
         
                     <ul>
-                        <li><strong>Customer Dashboard</strong> – Allows passengers to look their travel historyand check balances.</li>
-                        <li><strong>Station Dashboard</strong> – Enables station administrators to monitor train entries, transactions, and passenger movements.</li>
+                        <li ><strong style="font-size: large; color: blue;">Customer Dashboard</strong> – Allows passengers to look their travel and check balances.</li>
+
+                        <img src="passenger_dash.jpg" alt="Image 1">
+                        <li><strong style="font-size: large; color: blue;">Station Dashboard</strong> – Enables station administrators to monitor train entries, transactions, and passenger movements.</li>
+
+                        <img src="sta_dash.jpg" alt="Image 1">
                     </ul>
         
                     <h3>How It Works</h3>
@@ -109,14 +132,6 @@
                         <li><strong>Real-Time Travel Monitoring:</strong> At the <strong>exit station</strong>, passengers tap the card again. The system calculates the fare, deducts the amount from the balance, and records the transaction.</li>
                         <li><strong>Transaction & Data Management:</strong> The deducted fare is stored in the backend, and passengers can view their transaction history.</li>
                     </ol>
-        
-                    <h3>Technology Stack</h3>
-                    <ul>
-                        <li><strong>Backend:</strong> Django (Python)</li>
-                        <li><strong>Frontend:</strong> React.js</li>
-                        <li><strong>Database:</strong> MySQL</li>
-                        <li><strong>Authentication & Security:</strong>.....</li>
-                    </ul>
 
         
                     <p>Our <strong>Smart Railway Ticketing & Navigation System</strong> is designed to make railway travel more efficient, secure, and user-friendly, providing a <strong>modern digital solution</strong> for Sri Lanka Railways. 🚆✨</p>
@@ -132,9 +147,23 @@
     <section id="testing">
         <div class="section-container">
             <h2>Testing</h2>
-            <p>Testing procedures and results...</p>
+            <p>We ensure that our system is reliable and robust by employing a combination of unit testing and integration testing.</p>
+            
+            <h3>Unit Testing</h3>
+            <p>Unit testing involves testing individual components or units of the system to ensure that they function as expected. Each function or method is tested in isolation to catch bugs early and ensure the integrity of the code.</p>
+        <p>We perform unit tests on the routing system to ensure that the correct pages are loaded when users navigate through the application. These tests help confirm that clicking on links or buttons correctly triggers the loading of the appropriate page, section, or view. We focus on the following routing scenarios:</p>
+        <ul>
+            <li><strong>Navigation Tests:</strong> Verifying that clicking on a navigation link correctly loads the corresponding section of the page.</li>
+            <li><strong>URL Matching:</strong> Ensuring that the URL dynamically updates and matches the appropriate section or page.</li>
+            <li><strong>Route Protection:</strong> Ensuring that specific routes or pages are protected or require authentication</li>
+        </ul>
+            <h3>Integration Testing</h3>
+            <p>Integration testing ensures that the different modules and components of the system work together seamlessly. These tests help ensure that data flows correctly between modules and that the system operates as expected when different parts are integrated.</p>
+           
+            <p>Both unit testing and integration testing are crucial for maintaining high-quality code and ensuring that the system meets the required standards before deployment.</p>
         </div>
     </section>
+    
     
     <section id="budget">
         <div class="section-container">
