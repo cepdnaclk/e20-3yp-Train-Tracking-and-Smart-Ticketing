@@ -3,13 +3,17 @@
 #define SECRET
 #define THINGNAME "ESP32_BackEnd"
 
-const char WIFI_SSID[] = "UPUL slt fiber";
-const char WIFI_PASSWORD[] = "panawennage2020";
+const char WIFI_SSID[] = "dipaHutto";
+const char WIFI_PASSWORD[] = "084q51-B";
 const char AWS_IOT_ENDPOINT[] = "a2v3g8yh48u9ya-ats.iot.ap-south-1.amazonaws.com";
 
 
+// WiFi Credentials
+//#define WIFI_SSID "dipaHutto"
+//#define WIFI_PASSWORD "084q51-B"
+
 // Amazon Root CA 1
-static const char AWS_CERT_CA[] PROGMEM = R"EOF(
+static const char AWS_CERT_CA[] PROGMEM = R"EOF( 
 -----BEGIN CERTIFICATE-----
 MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqhkiG9w0BAQsF
 ADA5MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRkwFwYDVQQDExBBbWF6
