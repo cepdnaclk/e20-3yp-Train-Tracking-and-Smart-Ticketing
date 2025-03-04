@@ -75,9 +75,28 @@ class StationSerializer(serializers.ModelSerializer):
 
 
 class CardSerializer(serializers.ModelSerializer):
+    # We will validate the nic_number and issued_station fields here
+    nic_number = serializers.CharField(max_length=20)
+    issued_station = serializers.CharField(max_length=20)
+
     class Meta:
         model = Card
-        fields = '__all__'
+        fields = ['card_num', 'nic_number', 'balance', 'card_type', 'issued_date', 'issued_station']
+
+    def validate_nic_number(self, value):
+        # Check if the nic_number exists in the Passenger model
+        try:
+            passenger = Passenger.objects.get(nic_number=value)
+        except Passenger.DoesNotExist:
+            raise serializers.ValidationError("The NIC number does not exist.")
+        return passenger
+
+    def validate_issued_station(self, value):
+        try:
+            station = Station.objects.get(station_ID=value)
+        except Station.DoesNotExist:
+            raise serializers.ValidationError("The Station ID does not exist.")
+        return station
 
 
 class TransactionSerializer(serializers.ModelSerializer):

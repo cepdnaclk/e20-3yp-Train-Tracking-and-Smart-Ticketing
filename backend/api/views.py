@@ -2,13 +2,15 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 from rest_framework import generics
 
-from .models import Passenger, Station
-from .serializer import PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer
+from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge
+from .serializer import RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
 
 User = get_user_model()
 
@@ -116,3 +118,249 @@ class CreateStationView(generics.CreateAPIView):
             serializer.save()
             return Response({"message": "Station created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class GetcarddetailsView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        print(request.data)
+        task_ID  = request.data.get('task_id')
+
+
+        if task_ID == 1:
+            card_num = request.data.get('uid')
+            try:
+                card = Card.objects.get(card_num=card_num)
+                response_data = {
+                    "nic": card.nic_number.nic_number,
+                    "amount": card.balance
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+            except Card.DoesNotExist:
+                return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+
+        elif task_ID == 2:
+            nic = request.data.get('nic')
+            if not nic:
+                return Response({"error": "Card is invalid_0"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                passenger = Passenger.objects.get(nic_number=nic)
+                card = Card.objects.get(nic_number=passenger)
+                return Response({"message": "Card is valid",}, status=status.HTTP_200_OK)
+            except Passenger.DoesNotExist:
+                return Response({"error": "Card is invalid_1"}, status=status.HTTP_404_NOT_FOUND)
+            except Card.DoesNotExist:
+                return Response({"error": "Card is invalid_2"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+        elif task_ID == 3:
+            nic = request.data.get('nic')
+            start = request.data.get('station_id')
+            end = request.data.get('this_station')
+            amount = request.data.get('amount')
+            try:
+                min_station = min(int(start), int(end))
+                max_station = max(int(start), int(end))
+                route = str(min_station) + "-" + str(max_station)
+                try:
+                    price = TransportFees.objects.get(route=route).amount
+                    new_amount = int(amount - price)
+                    passenger = Passenger.objects.get(nic_number=nic)
+                    card = Card.objects.get(nic_number=passenger)
+                    card.balance = new_amount
+                    card.save()
+                except TransportFees.DoesNotExist:
+                    return Response({"error": "Route not found"}, status=status.HTTP_404_NOT_FOUND)
+                passenger = Passenger.objects.get(nic_number=nic)
+                card = Card.objects.get(nic_number=passenger)
+                transaction = Transaction.objects.create(
+                    card_num=card,
+                    S_station=start,
+                    E_station=end,
+                    amount=price
+                )
+                transaction.save()
+                return Response({"new_amount": new_amount}, status=status.HTTP_200_OK)
+            except Passenger.DoesNotExist:
+                return Response({"error": "Passenger with this NIC does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            except Card.DoesNotExist:
+                return Response({"error": "No card found for this NIC"}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    
+    def get(self, request):
+        return Response({"error" : "pa####d get ewanne post ewapan"}, status=status.HTTP_201_CREATED)
+        
+        
+class PassengerAndCardDetailsView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, nic_number, *args, **kwargs):
+        passenger = get_object_or_404(Passenger, nic_number=nic_number)
+
+        # Get card details
+        cards = Card.objects.filter(nic_number=passenger)
+
+        # Convert passenger details to JSON
+        passenger_data = {
+            "nic_number": passenger.nic_number,
+            "first_name": passenger.first_name,
+            "last_name": passenger.last_name,
+            "dob": passenger.dob.strftime("%Y-%m-%d"),
+            "address": passenger.address,
+            "email": passenger.email,
+            "phone": passenger.phone,
+        }
+
+        # Convert card details to JSON
+        card_data = [
+            {
+                "card_num": card.card_num,
+                "balance": card.balance,
+                "card_type": card.card_type,
+                "issued_date": card.issued_date.strftime("%Y-%m-%d"),
+                "issued_station": card.issued_station.station_name,  # Assuming Station model has a 'name' field
+            }
+            for card in cards
+        ]
+
+        # Combine both responses
+        response_data = {
+            "passenger": passenger_data,
+            "cards": card_data,
+        }
+
+        return Response(response_data, status=200)
+
+
+class CreateCardView(generics.CreateAPIView):
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Card created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+
+        # If validation fails, return the error details
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class RechargeCardView(APIView):
+    permission_classes = [AllowAny]
+    def patch(self, request, *args, **kwargs):
+        nic_number = request.data.get("nic_number")
+        new_balance = request.data.get("balance")
+        station_id = request.data.get("station_ID")
+        if not nic_number or new_balance is None:
+            return Response({"error": "Card number and balance are required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            passenger = Passenger.objects.get(nic_number=nic_number)
+            card = Card.objects.get(nic_number_id=passenger.pk)
+            old_balance = card.balance
+            old_balance = old_balance + new_balance
+            card.balance = old_balance
+            card.save()
+            station = Station.objects.get(station_ID=str(station_id))
+            Recharge.objects.create(
+                card_num=card,
+                amount=new_balance,
+                station=station
+            )
+            return Response({"message": "Balance updated successfully", "balance": card.balance}, status=status.HTTP_200_OK)
+        except Card.DoesNotExist:
+            return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CreateRouteView(generics.CreateAPIView):
+    queryset = TransportFees.objects.all()
+    serializer_class = TransportFeesSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Route added successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class TransactionListView(APIView):
+    def get(self, request):
+        date = request.GET.get('date')
+        station_id = request.GET.get('station_id')
+        if not date or not station_id:
+            return Response({"error": "Date and station_id are required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            formatted_date = datetime.strptime(date, "%Y-%m-%d").date()
+            # Filter transactions for the specific date and station_id
+            departing_transactions = Transaction.objects.filter(date__date=formatted_date, S_station=station_id)
+            arriving_transactions = Transaction.objects.filter(date__date=formatted_date, E_station=station_id)
+            # Serialize the transactions
+            departing_data = [
+                {
+                    "card_num": transaction.card_num.card_num,
+                    "start_station": transaction.S_station,
+                    "end_station": transaction.E_station,
+                    "date": transaction.date,
+                    "amount": transaction.amount
+                }
+                for transaction in departing_transactions
+            ]
+
+            arriving_data = [
+                {
+                    "card_num": transaction.card_num.card_num,
+                    "start_station": transaction.S_station,
+                    "end_station": transaction.E_station,
+                    "date": transaction.date,
+                    "amount": transaction.amount
+                }
+                for transaction in arriving_transactions
+            ]
+
+            return Response({
+                "departing": departing_data,
+                "arriving": arriving_data
+            }, status=status.HTTP_200_OK)
+
+        except ValueError:
+            return Response({"error": "Invalid date format, use YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PassengerTransactionsView(APIView):
+    permission_classes = [AllowAny]    
+    def get(self, request):
+        passenger_id = request.GET.get('passenger_id')       
+        if not passenger_id:
+            return Response({"error": "Passenger ID is required"}, status=400)     
+        try:
+            passenger = get_object_or_404(Passenger, nic_number=passenger_id)
+            card = get_object_or_404(Card, nic_number=passenger)
+            transactions = Transaction.objects.filter(card_num=card)
+            serializer = TransactionSerializer(transactions, many=True)
+            return Response(serializer.data, status=200)
+        except Passenger.DoesNotExist:
+            return Response({"error": "Passenger not found"}, status=404)
+        except Card.DoesNotExist:
+            return Response({"error": "No card associated with this passenger"}, status=404)
+        
+
+class PassengerRechargesView(APIView):
+    def get(self, request, *args, **kwargs):
+        nic_number = request.query_params.get("passenger_id")  # Getting NIC number from query params
+        if not nic_number:
+            return Response({"error": "NIC number is required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            passenger = Passenger.objects.get(nic_number=nic_number)
+            card = Card.objects.get(nic_number=passenger)
+            recharges = Recharge.objects.filter(card_num=card)
+            serializer = RechargeSerializer(recharges, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Passenger.DoesNotExist:
+            return Response({"error": "Passenger not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Card.DoesNotExist:
+            return Response({"error": "No card found for this passenger"}, status=status.HTTP_404_NOT_FOUND)

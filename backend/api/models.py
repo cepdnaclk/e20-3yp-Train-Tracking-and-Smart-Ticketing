@@ -26,43 +26,41 @@ class Passenger(models.Model):
     email = models.EmailField(unique=True, null=True, blank=True)
     phone = models.CharField(max_length=15)
 
+
 class Station(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="station_profile")
-    station_ID = models.IntegerField(unique=True)
+    station_ID = models.CharField(unique=True, max_length=20)
     station_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, null=True, blank=True)
     phone = models.CharField(max_length=15)
 
 
 class Card(models.Model):
-    card_num = models.IntegerField().primary_key
-    nic_number = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    card_num = models.CharField(unique=True, default="0101", max_length=10)
+    nic_number = models.OneToOneField(Passenger, on_delete=models.CASCADE, related_name="card", unique=True)
+    balance = models.IntegerField(null=False, default=0)
     card_type = models.CharField(max_length=100, null=False, default="normal")
     issued_date = models.DateField()
     issued_station = models.ForeignKey(Station, on_delete=models.CASCADE)
 
 
 class Transaction(models.Model):
-    Transaction_ID = models.IntegerField().primary_key
     card_num = models.ForeignKey(Card, on_delete=models.CASCADE)
-    S_station = models.CharField(max_length=100)
-    E_station = models.CharField(max_length=100)
-    date = models.DateTimeField()
+    S_station = models.CharField(max_length=100, null=True)
+    E_station = models.CharField(max_length=100, null=True)
+    date = models.DateTimeField(auto_now_add=True)
     amount = models.FloatField()
 
 
 class Recharge(models.Model):
-    Recharge_ID = models.IntegerField().primary_key
     card_num = models.ForeignKey(Card, on_delete=models.CASCADE)
     amount = models.FloatField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
 
 
 class TransportFees(models.Model):
-    Price_ID = models.IntegerField().primary_key
-    station_1 = models.CharField(max_length=100)
-    station_2 = models.CharField(max_length=100)
+    route = models.CharField(max_length=100, unique=True, null=True)
     amount = models.FloatField()
 
 

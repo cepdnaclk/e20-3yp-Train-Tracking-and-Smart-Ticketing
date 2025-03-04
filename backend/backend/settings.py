@@ -147,10 +147,9 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins
+CORS_ALLOW_CREDENTIALS = False # Required if using authentication
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"] # Required if using authentication
+CORS_ALLOW_HEADERS = ["*"]  # Allow all headers
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWS_CREDENTIALS = True
-
-AUTH_USER_MODEL = 'api.User'  # Replace 'your_app_name' with the actual app name
-AUTH_USER_MODEL = 'api.User'
+AUTH_USER_MODEL = 'api.User'  # Replace 'your_app_name' with the actual app name 
