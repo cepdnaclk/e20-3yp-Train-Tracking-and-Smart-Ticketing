@@ -5,17 +5,37 @@
 #include <MFRC522.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include <Arduino.h>
+#include "esp32-hal-ledc.h"
+
 
 // WiFi Credentials
-#define WIFI_SSID "SIGNAL_NA"
-#define WIFI_PASSWORD "new_password"
+#define WIFI_SSID "UPUL slt fiber"
+#define WIFI_PASSWORD "panawennage2020"
 
 // API Endpoint
-#define SERVER_URL "http://192.168.8.119:8000/api/card/read/"
+#define SERVER_URL "http://192.168.42.64:8000/api/card/read/"
 
 // RFID Module Pins
 #define SS_PIN 5
 #define RST_PIN 22
+
+// for buzzer
+#define BUZZER_PIN 4  // Change this to your buzzer's GPIO pin
+#define LEDC_CHANNEL  0
+#define LEDC_FREQUENCY 1000
+#define LEDC_RESOLUTION 8
+
+/*
+void buzz(int frequency, int duration) {
+    ledcSetup(LEDC_CHANNEL, frequency, LEDC_RESOLUTION);  // Configure the PWM channel
+    ledcAttachPin(BUZZER_PIN, LEDC_CHANNEL);  // Attach buzzer pin to PWM channel
+    ledcWrite(LEDC_CHANNEL, 128);   // 50% duty cycle (128 out of 255 for 8-bit resolution)
+
+    delay(duration);  // Wait for the duration
+
+    ledcWrite(LEDC_CHANNEL, 0);  // Stop sound
+}*/
 
 // Initialize RFID and WiFiClient
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -62,6 +82,7 @@ void connectWiFi() {
         Serial.println(WiFi.localIP());
     } else {
         Serial.println("\n❌ WiFi connection failed. Restarting...");
+        alert();
         ESP.restart();
     }
 }
@@ -71,6 +92,7 @@ void sendPostRequest(const String &uid) {
     HTTPClient http;
     http.begin(client, SERVER_URL);
     http.addHeader("Content-Type", "application/json");
+    http.setTimeout(10000);
 
     StaticJsonDocument<200> jsonDoc;
     jsonDoc["task_id"] = 1;
@@ -89,6 +111,7 @@ void sendPostRequest(const String &uid) {
         parseAndWriteJson(response);
     } else {
         Serial.println("❌ HTTP Request Failed! Error Code: " + String(httpResponseCode));
+        alert();
     }
     
 
@@ -112,15 +135,19 @@ String getUID() {
 bool writeBlockData(byte block, byte *buffer) {
     if (mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(mfrc522.uid)) != MFRC522::STATUS_OK) {
         Serial.println("❌ Authentication failed!");
+        alert();
         return false;
     }
 
     if (mfrc522.MIFARE_Write(block, buffer, 16) != MFRC522::STATUS_OK) {
         Serial.println("❌ Writing failed!");
+        alert();
         return false;
     }
 
     Serial.println("✅ Writing successful!");
+    success();
+    //buzz(5000,1000);
     return true;
 }
 
@@ -134,12 +161,31 @@ String intToBinary(int num) {
     return binaryString;
 }
 
+void success(){
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(1000);
+    digitalWrite(BUZZER_PIN, LOW);
+}
+
+void alert(){
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(100);
+    digitalWrite(BUZZER_PIN, LOW);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(100);
+    digitalWrite(BUZZER_PIN, LOW);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(100);
+    digitalWrite(BUZZER_PIN, LOW);
+}
+
 
 void parseAndWriteJson(const String &jsonData) {
     StaticJsonDocument<512> jsonDoc; // Increase size if needed
     DeserializationError error = deserializeJson(jsonDoc, jsonData);
     if (error) {
         Serial.println("❌ JSON Parsing failed!");
+        alert();
         return;
     }
 
@@ -151,6 +197,7 @@ void parseAndWriteJson(const String &jsonData) {
     // Ensure timestamp is valid before using
     if (timestamp == 0) {
         Serial.println("❌ Invalid timestamp!");
+        alert();
         return;
     }
 
@@ -201,6 +248,7 @@ void parseAndWriteJson(const String &jsonData) {
 
 
 void setup() {
+    pinMode(BUZZER_PIN, OUTPUT);
     Serial.begin(115200);
     SPI.begin();
     mfrc522.PCD_Init();

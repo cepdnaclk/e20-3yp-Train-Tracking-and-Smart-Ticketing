@@ -5,8 +5,8 @@
 #include <MFRC522.h>
 
 // WiFi Credentials
-#define WIFI_SSID "dipaHutto"
-#define WIFI_PASSWORD "084q51-B"
+#define WIFI_SSID "UPUL slt fiber"
+#define WIFI_PASSWORD "panawennage2020"
 
 // API Endpoint
 #define SERVER_URL "http://192.168.137.241/rfid_api"
