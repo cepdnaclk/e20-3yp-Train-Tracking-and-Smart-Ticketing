@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,9 +9,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from rest_framework import generics
+from django.conf import settings
 
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge
 from .serializer import RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
+from .mqtt_client import start_mqtt_client
 
 User = get_user_model()
 
@@ -364,3 +367,23 @@ class PassengerRechargesView(APIView):
             return Response({"error": "Passenger not found"}, status=status.HTTP_404_NOT_FOUND)
         except Card.DoesNotExist:
             return Response({"error": "No card found for this passenger"}, status=status.HTTP_404_NOT_FOUND)
+        
+## mqtt-iot-core-intergration
+
+# Start the MQTT client
+mqtt_client = start_mqtt_client()
+
+class PublishMessageView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        topic = settings.MQTT_TOPIC_PUB  # Use the topic from settings
+        message = request.data.get("message", "Hello ESP32!")  # Get the message from the request body
+        try:
+            mqtt_client.publish(topic, message)
+            return JsonResponse({"status": "Message published", "message": message}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    
+    
+
