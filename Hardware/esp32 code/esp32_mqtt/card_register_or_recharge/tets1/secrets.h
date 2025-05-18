@@ -3,14 +3,19 @@
 #define SECRET
 #define THINGNAME "ESP32_Device"
 
-//const char WIFI_SSID[] = "UPUL slt fiber";
-//const char WIFI_PASSWORD[] = "panawennage2020";
+const char WIFI_SSID[] = "UPUL slt fiber";
+const char WIFI_PASSWORD[] = "panawennage2020";
 const char AWS_IOT_ENDPOINT[] = "a2v3g8yh48u9ya-ats.iot.ap-south-1.amazonaws.com";
 
+// API Endpoint
+//#define SERVER_URL "http://192.168.8.119:8000/api/card/read/"
+
+#define AWS_IOT_PUBLISH_TOPIC   "esp32/rfid_pub"
+#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/rfid_sub"
 
 // WiFi Credentials
-#define WIFI_SSID "SIGNAL_NA"
-#define WIFI_PASSWORD "new_password"
+//#define WIFI_SSID "SIGNAL_NA"
+//#define WIFI_PASSWORD "new_password"
 
 // Amazon Root CA 1
 static const char AWS_CERT_CA[] PROGMEM = R"EOF( 
