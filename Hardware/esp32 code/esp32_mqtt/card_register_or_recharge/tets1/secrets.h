@@ -3,8 +3,8 @@
 #define SECRET
 #define THINGNAME "ESP32_Device"
 
-const char WIFI_SSID[] = "UPUL slt fiber";
-const char WIFI_PASSWORD[] = "panawennage2020";
+//const char WIFI_SSID[] = "UPUL slt fiber";
+//const char WIFI_PASSWORD[] = "panawennage2020";
 const char AWS_IOT_ENDPOINT[] = "a2v3g8yh48u9ya-ats.iot.ap-south-1.amazonaws.com";
 
 // API Endpoint
@@ -12,8 +12,13 @@ const char AWS_IOT_ENDPOINT[] = "a2v3g8yh48u9ya-ats.iot.ap-south-1.amazonaws.com
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/rfid_pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/rfid_sub"
+#define AWS_IOT_SUBSCRIBE_TOPIC_2 "esp32/rfid_sub_2"
+
+const char WIFI_SSID[] = "HUAWEI Y6s";
+const char WIFI_PASSWORD[] = "/burupetiya/";
 
 // WiFi Credentials
+
 //#define WIFI_SSID "SIGNAL_NA"
 //#define WIFI_PASSWORD "new_password"
 

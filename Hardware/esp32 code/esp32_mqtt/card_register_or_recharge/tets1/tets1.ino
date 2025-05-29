@@ -1,5 +1,6 @@
 #include "secrets.h"
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <SPI.h>
@@ -9,11 +10,24 @@
 #include <LiquidCrystal_I2C.h>
 #include <MQTTClient.h>
 #include <vector>
+#include "LittleFS.h"
+
+// variable to store the csv file
+File ticketFile;
+
+// data structure to store the ticket prices and the distance
+struct TicketInfo {
+  float distance_km;
+  float class1_price;
+  float class2_price;
+  float class3_price;
+};
 
 // variables for offline mode
 unsigned long lastWiFiCheck = 0;
 const unsigned long WIFI_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 bool isWiFiConnected = false;
+bool isMQTTConnected = false;
 
 // vector to store the requests arrive in offline mode
 std::vector<String> nicQueue;
@@ -61,14 +75,14 @@ void lcdLog(const String &message, int row = 0) {
 // taking the current time
 String getCurrentDateTime() {
     timeClient.update();
-    int year = 1970 + timeClient.getEpochTime() / 31556926;
-    int month = (timeClient.getEpochTime() % 31556926) / 2629743 + 1;
-    int day = (timeClient.getEpochTime() % 2629743) / 86400 + 1;
-    String date = String(year) + "-" + String(month) + "-" + String(day);
-    String time = timeClient.getFormattedTime();
-    return date + " " + time;
+    time_t rawTime = timeClient.getEpochTime();
+    struct tm *timeInfo = localtime(&rawTime);
+    char buffer[30];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+    return String(buffer);
 }
 
+/*
 // connecting to wifi
 void connectWiFi() {
     Serial.print("Connecting to WiFi...");
@@ -85,6 +99,7 @@ void connectWiFi() {
 
     if (WiFi.status() == WL_CONNECTED) {
         isWiFiConnected = true;
+        processPayloadQueue();
         Serial.println("\n✅ Connected to WiFi!");
         Serial.print("IP Address: ");
         Serial.println(WiFi.localIP());
@@ -99,8 +114,10 @@ void connectWiFi() {
         lcdLog("WiFi Failed!", 0);
         delay(3000);
         //ESP.restart();
+        lcdLog("Offline mode...", 0);
+        delay(2000);
     }
-}
+}*/
 
 // take actions looking at the type of message received
 void messageHandler(String &topic, String &payload) {
@@ -162,9 +179,14 @@ void awsConnect() {
 
     lcdLog("Connecting AWS", 0);
     delay(500);
-    while (!client.connect(THINGNAME)) {
+    int attempts = 0;
+    while (!client.connect(THINGNAME) && attempts < 10) {
         delay(1000);
         lcdLog("Retry AWS...", 1);
+        attempts++;
+    }
+    if (client.connect(THINGNAME)){
+        isMQTTConnected = true;
     }
 
     if (client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC)) {
@@ -299,7 +321,7 @@ bool readBlockData(byte block, byte *buffer) {
     return true;
 }
 
-// for testing to determine correctly data is written
+// function which runs when card is first kept
 void verifyCardData() {
     byte buffer1[18];
     byte buffer4[18];
@@ -332,81 +354,151 @@ void verifyCardData() {
             passengerEnters(price, nic);
         } else {
             // when passenger exits from a station
-            passengerExits();
+            passengerExits(price, nic, stationId);
         }
     } else {
         Serial.println("❌ Failed to read data from block 4");
     }
 }
 
-// function to implement passenger exit
-void passengerExits(int amount, String &nic, int sationId){
-    lcdLog("Place the card!", 0);
+// enqueue the json payload
+void enqueueFailedPayload(const String& jsonPayload) {
+  nicQueue.push_back(jsonPayload);
+  Serial.println("Enqueued failed payload: " + jsonPayload);
+}
+
+// dequeue the json payload from the queue
+void processPayloadQueue() {
+
+  std::vector<String> remainingQueue;
+
+  for (String& payload : nicQueue) {
+    /*if (client.connect(THINGNAME)){
+        Serial.println("Connected to AWS");
+    }*/
+    if (client.publish(AWS_IOT_PUBLISH_TOPIC, payload)) {
+      Serial.println("Queued payload published: " + payload);
+    } else {
+      Serial.println("Failed to publish queued payload: " + payload);
+      remainingQueue.push_back(payload);
+    }
+  }
+
+  nicQueue = remainingQueue;
+}
+
+// send data to iot core and write to the card
+void sendData(int amount, String &nic, int taskId){
+
+    StaticJsonDocument<200> jsonDoc;
+    jsonDoc["task_id"] = taskId;
+    jsonDoc["nic"] = nic;
+    jsonDoc["amount"] = amount;
+    jsonDoc["station"] = STATION_ID;
+    Serial.println("jsonDoc prepared");
+
+    char jsonBuffer[256];
+    serializeJson(jsonDoc, jsonBuffer);
+    Serial.print("Payload: ");
+    Serial.println(jsonBuffer);
     
+    if (!isWiFiConnected){
+        enqueueFailedPayload(jsonBuffer);
+    }
+    else{
+        if (client.connected()) {
+        client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+        lcdLog("Published to AWS", 1);
+        } else {
+        lcdLog("MQTT Not Conn", 1);
+        }
+    }
+    
+    uint32_t timestamp = timeClient.getEpochTime();
+    if (timestamp == 0) {
+        Serial.println("❌ Invalid timestamp!");
+        lcd.clear();
+        lcdLog("Bad Timestamp!");
+        return;
+    }
+
+    byte block4[16] = {0};
+    block4[0] = (amount >> 24) & 0xFF;
+    block4[1] = (amount >> 16) & 0xFF;
+    block4[2] = (amount >> 8) & 0xFF;
+    block4[3] = amount & 0xFF;
+    if (taskId == 2){
+        block4[4] = (STATION_ID >> 8) & 0xFF;
+        block4[5] = STATION_ID & 0xFF;
+    } else if (taskId == 3){
+        block4[4] = 0x00;
+        block4[5] = 0x00;        
+    }
+    block4[6] = (timestamp >> 24) & 0xFF;
+    block4[7] = (timestamp >> 16) & 0xFF;
+    block4[8] = (timestamp >> 8) & 0xFF;
+    block4[9] = timestamp & 0xFF;
+
+    lcd.clear();
+    Serial.println("Rewriting card already present...");
+    lcd.setCursor(0, 1);
+    //lcd.print(getUID());
+
+    Serial.println("Card Detected");
+    lcd.setCursor(0, 1);
+    lcd.print(getUID());
+
+    writeBlockData(4, block4);
+
+    lcdLog("Done.....", 0);
+    delay(2000);
+    lcdLog("Place the card",0);
+    lcdLog("to travel",1);
+
+}
+
+// WiFi disconnected event handler
+void onWiFiDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
+  Serial.println("WiFi Disconnected");
+  isWiFiConnected = false;
+}
+
+// Got IP address event handler
+/*
+void onWiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
+  Serial.print("WiFi Connected. IP Address: ");
+  Serial.println(WiFi.localIP());
+  isWiFiConnected = true;
+  awsConnect();
+  if (!nicQueue.empty()) {
+    processPayloadQueue();
+    }
+}*/
+
+// function to implement passenger exit
+void passengerExits(int amount, String &nic, int stationId){
+    Serial.println("Passenger exiting...");
+    TicketInfo ticketDetails = getTicketInfo(STATION_ID, stationId);
+    int price = ticketDetails.class3_price;
+    lcd.setCursor(0, 1);
+    lcd.print("Price Rs: ");
+    lcd.print(price, 2);
+    delay(2000);
+    amount = amount - price;
+    lcd.setCursor(0, 1);
+    lcd.print("Balance left Rs: ");
+    lcd.print(amount, 2);
+    delay(2000);
+    // send data to aws and wite to the card
+    sendData(amount, nic, 3);    
 }
 
 // function to implement when passenger enters
 void passengerEnters(int amount, String &nic){
     lcdLog("Place the card!",0);
     if (amount >= min_amount){
-        StaticJsonDocument<200> jsonDoc;
-        jsonDoc["task_id"] = 2;
-        jsonDoc["nic"] = nic;
-        jsonDoc["amount"] = amount;
-        Serial.println("jsonDoc prepared");
-
-        char jsonBuffer[256];
-        serializeJson(jsonDoc, jsonBuffer);
-        Serial.print("Payload: ");
-        Serial.println(jsonBuffer);
-
-        if (client.connected()) {
-            client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-            lcdLog("Published to AWS", 1);
-        } else {
-            lcdLog("MQTT Not Conn", 1);
-        }
-
-        uint32_t timestamp = timeClient.getEpochTime();
-        if (timestamp == 0) {
-            Serial.println("❌ Invalid timestamp!");
-            lcd.clear();
-            lcdLog("Bad Timestamp!");
-            return;
-        }
-
-        byte block4[16] = {0};
-        block4[0] = (amount >> 24) & 0xFF;
-        block4[1] = (amount >> 16) & 0xFF;
-        block4[2] = (amount >> 8) & 0xFF;
-        block4[3] = amount & 0xFF;
-        block4[4] = (STATION_ID >> 8) & 0xFF;
-        block4[5] = STATION_ID & 0xFF;
-        block4[6] = (timestamp >> 24) & 0xFF;
-        block4[7] = (timestamp >> 16) & 0xFF;
-        block4[8] = (timestamp >> 8) & 0xFF;
-        block4[9] = timestamp & 0xFF;
-
-        mfrc522.PICC_HaltA();
-        mfrc522.PCD_StopCrypto1();
-
-        lcd.clear();
-        lcdLog("Place Card NOW", 0);
-        while (!mfrc522.PICC_ReadCardSerial()) {
-            delay(100);
-        }
-
-        Serial.println("Card Detected");
-        lcd.setCursor(0, 1);
-        lcd.print(getUID());
-
-        writeBlockData(4, block4);
-
-        lcdLog("Done.....", 0);
-        delay(2000);
-        lcdLog("Place the card",0);
-        lcdLog("to travel",1);
-
+        // send data to aws and wite to the card
+        sendData(amount, nic, 2);
     }else{
         lcdLog("Balance is ", 0);
         lcdLog("Not enough....", 1);
@@ -416,8 +508,7 @@ void passengerEnters(int amount, String &nic){
     }
 }
 
-
-// 
+// Fetch data from the incoming json file
 void parseAndWriteJson(const String &jsonData) {
     StaticJsonDocument<512> jsonDoc;
     DeserializationError error = deserializeJson(jsonDoc, jsonData);
@@ -495,8 +586,102 @@ void readCardAndHandle() {
     delay(2000);
 }
 
+// Initiation of LittleFS
+void littleFSInnitiation(){
+
+    if(!LittleFS.begin()){
+    Serial.println("An Error has occurred while mounting LittleFS");
+    return;
+    }
+    ticketFile = LittleFS.open("/ticket_prices.csv", "r");
+    if (!ticketFile) {
+        Serial.println("Failed to open /ticket_prices.csv");
+    } else {
+        Serial.println("File opened successfully");
+    }
+}
+
+// function returns the price of the ticket and the distances
+TicketInfo getTicketInfo(int fromID, int toID) {
+  TicketInfo info = { -1.0, -1.0, -1.0, -1.0 }; // Default values indicating not found
+
+  if (!ticketFile) {
+    Serial.println("File not open");
+    return info;
+  }
+
+  // Move to the beginning of the file
+  ticketFile.seek(0, SeekSet);
+
+  // Skip the header line
+  String header = ticketFile.readStringUntil('\n');
+
+  while (ticketFile.available()) {
+    String line = ticketFile.readStringUntil('\n');
+    line.trim(); // Remove any leading/trailing whitespace
+
+    if (line.length() == 0) continue; // Skip empty lines
+
+    // Split the line by commas
+    int commaIndex1 = line.indexOf(',');
+    int commaIndex2 = line.indexOf(',', commaIndex1 + 1);
+    int commaIndex3 = line.indexOf(',', commaIndex2 + 1);
+    int commaIndex4 = line.indexOf(',', commaIndex3 + 1);
+    int commaIndex5 = line.indexOf(',', commaIndex4 + 1);
+
+    if (commaIndex5 == -1) continue; // Malformed line
+
+    int fileFromID = line.substring(0, commaIndex1).toInt();
+    int fileToID = line.substring(commaIndex1 + 1, commaIndex2).toInt();
+
+    if (fileFromID == fromID && fileToID == toID) {
+      info.distance_km = line.substring(commaIndex2 + 1, commaIndex3).toFloat();
+      info.class1_price = line.substring(commaIndex3 + 1, commaIndex4).toFloat();
+      info.class2_price = line.substring(commaIndex4 + 1, commaIndex5).toFloat();
+      info.class3_price = line.substring(commaIndex5 + 1).toFloat();
+      break;
+    }
+  }
+
+  return info;
+}
+
+// aws connect helper function
+void awsConnectTask(void *parameter) {
+  awsConnect();
+
+  // Wait until MQTT is connected before processing queue
+  if (isMQTTConnected) {
+    if (!nicQueue.empty()) {
+      processPayloadQueue();
+    }
+  }
+
+  vTaskDelete(NULL);  // Clean up the task
+}
+
+// set aws connect to run on a differen core
+void onWiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
+  Serial.print("WiFi Connected. IP Address: ");
+  Serial.println(WiFi.localIP());
+  isWiFiConnected = true;
+
+  // Run AWS connect and queue processing in its own task
+    xTaskCreatePinnedToCore(
+    awsConnectTask,     // task function
+    "AWSConnectTask",   // task name
+    8192,               // stack size
+    NULL,               // task parameters
+    1,                  // priority
+    NULL,               // task handle (optional)
+    0                   // run on core 1
+  );
+}
+
 void setup() {
     Serial.begin(115200);
+    littleFSInnitiation();
+    WiFi.mode(WIFI_STA);
     SPI.begin();
     mfrc522.PCD_Init();
     for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;
@@ -505,7 +690,17 @@ void setup() {
     lcd.backlight();
     lcdLog("Starting...", 0);
 
-    connectWiFi();
+    // Register WiFi and IP event handlers
+    WiFi.onEvent(onWiFiDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+    WiFi.onEvent(onWiFiGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP);
+
+    // Set Wi-Fi to station mode and initiate connection
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+    Serial.println("Attempting to connect to WiFi...");
+
+
     awsConnect();
     initTime();
 
@@ -519,4 +714,5 @@ void setup() {
 void loop() {
     readCardAndHandle();
     client.loop();
+
 }
