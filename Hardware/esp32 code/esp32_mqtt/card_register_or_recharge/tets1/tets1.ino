@@ -28,6 +28,7 @@ unsigned long lastWiFiCheck = 0;
 const unsigned long WIFI_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 bool isWiFiConnected = false;
 bool isMQTTConnected = false;
+bool shouldConnectAWS = false;
 
 // vector to store the requests arrive in offline mode
 std::vector<String> nicQueue;
@@ -464,16 +465,12 @@ void onWiFiDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
 }
 
 // Got IP address event handler
-/*
 void onWiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
   Serial.print("WiFi Connected. IP Address: ");
   Serial.println(WiFi.localIP());
   isWiFiConnected = true;
-  awsConnect();
-  if (!nicQueue.empty()) {
-    processPayloadQueue();
-    }
-}*/
+  shouldConnectAWS = true;
+}
 
 // function to implement passenger exit
 void passengerExits(int amount, String &nic, int stationId){
@@ -646,21 +643,9 @@ TicketInfo getTicketInfo(int fromID, int toID) {
   return info;
 }
 
-// aws connect helper function
-void awsConnectTask(void *parameter) {
-  awsConnect();
-
-  // Wait until MQTT is connected before processing queue
-  if (isMQTTConnected) {
-    if (!nicQueue.empty()) {
-      processPayloadQueue();
-    }
-  }
-
-  vTaskDelete(NULL);  // Clean up the task
-}
 
 // set aws connect to run on a differen core
+/*
 void onWiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
   Serial.print("WiFi Connected. IP Address: ");
   Serial.println(WiFi.localIP());
@@ -674,9 +659,9 @@ void onWiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
     NULL,               // task parameters
     1,                  // priority
     NULL,               // task handle (optional)
-    0                   // run on core 1
+    0                   // run on core 0
   );
-}
+}*/
 
 void setup() {
     Serial.begin(115200);
@@ -712,6 +697,13 @@ void setup() {
 }
 
 void loop() {
+    if (shouldConnectAWS) {
+        awsConnect();
+    if (!nicQueue.empty()) {
+        processPayloadQueue();
+    }
+        shouldConnectAWS = false;
+    }
     readCardAndHandle();
     client.loop();
 
