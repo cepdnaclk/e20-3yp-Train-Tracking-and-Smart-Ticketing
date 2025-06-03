@@ -6,6 +6,7 @@ class User(AbstractUser):
         ('passenger', 'Passenger'),
         ('station', 'Station'),
         ('admin', 'Admin'),
+        ('driver', 'Driver'),
     )
 
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
@@ -62,6 +63,20 @@ class Recharge(models.Model):
 class TransportFees(models.Model):
     route = models.CharField(max_length=100, unique=True, null=True)
     amount = models.FloatField()
+
+
+class Routes(models.Model):
+    route_id = models.CharField(max_length=10)
+    state = models.BooleanField()
+    train = models.ForeignKey(Trains)
+    station_list = models.JSONField()
+
+
+class Trains(models.Model):
+    train_name = models.CharField(max_length=200)
+    last_station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    route = models.ForeignKey(Routes)
+
 
 
 

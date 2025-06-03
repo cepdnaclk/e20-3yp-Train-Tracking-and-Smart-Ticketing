@@ -1,3 +1,4 @@
+import os
 from django.apps import AppConfig
 import threading
 from .mqtt_client import start_mqtt_client
@@ -5,11 +6,13 @@ from .mqtt_client import start_mqtt_client
 class ApiConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "api"
+    mqtt_client_started = False
 
-    
-"""    def ready(self):
-        # Run the MQTT client in a background thread when the app is ready
-        thread = threading.Thread(target=start_mqtt_client)
-        thread.daemon = True  # This allows the thread to exit when the main program exits
-        thread.start()
-        print("MQTT client started")"""
+    def ready(self):
+        if os.environ.get('RUN_MAIN') == 'true':  # Prevents double execution
+            if not ApiConfig.mqtt_client_started:
+                thread = threading.Thread(target=start_mqtt_client)
+                thread.daemon = True
+                thread.start()
+                ApiConfig.mqtt_client_started = True
+                print("MQTT client started")

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
+from .views import AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
 
 urlpatterns = [
     path('passengers/new/', CreatePassengerView.as_view()),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('passenger/transactions/', PassengerTransactionsView.as_view(), name='passenger-transactions'),
     path("recharges/", PassengerRechargesView.as_view(), name="passenger-recharges"),
     path('publish-message/', PublishMessageView.as_view(), name='publish_message'),
+    path("admin/dashboard-stats", AdminDailyReportView.as_view(), name="admin-daily-report"),
 ]

@@ -165,3 +165,10 @@ MQTT_CERT_PATH = os.getenv("MQTT_CERT_PATH", './certs/50ed857801d1277db1cf867590
 MQTT_KEY_PATH = os.getenv("MQTT_KEY_PATH", './certs/50ed857801d1277db1cf867590deed042ec7c6c6b98792f8afbe4c0cb0df66a1-private.pem.key')  # Path to private key
 MQTT_CA_PATH = os.getenv("MQTT_CA_PATH", './certs/AmazonRootCA1.pem')  # Path to Amazon Root CA
 MQTT_CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "DjangoBackend")
+
+STATION_MQTT_TOPICS = {
+    "500": "esp32/station_500",
+    "501": "esp32/station_501",
+    "502": "esp32/station_502",
+    # Add more mappings as needed
+}

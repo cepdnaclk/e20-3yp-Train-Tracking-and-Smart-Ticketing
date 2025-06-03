@@ -10,10 +10,13 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 from rest_framework import generics
 from django.conf import settings
-
+from django.db.models import Sum, Count
+import json
+from django.utils.timezone import now
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge
 from .serializer import RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
-from .mqtt_client import start_mqtt_client
+import paho.mqtt.client as mqtt
+import ssl
 
 User = get_user_model()
 
@@ -53,7 +56,6 @@ class AdminSignupView(APIView):
 # ---- LOGIN VIEWS ----
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
-    print("User login")
 
     def post(self, request):
         print(request.data)
@@ -122,6 +124,21 @@ class CreateStationView(generics.CreateAPIView):
             return Response({"message": "Station created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class PublishMessageView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        topic = settings.MQTT_TOPIC_PUB  # Use the topic from settings
+        #message = request.data.get("message")
+        res = {"message": "pakaya"}
+        try:
+            mqtt_client.publish(topic, json.dumps(res))  # Convert to JSON string
+            return JsonResponse({"status": "Message published", "message": res}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        
+
 class GetcarddetailsView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -191,6 +208,7 @@ class GetcarddetailsView(APIView):
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
     
     def get(self, request):
         return Response({"error" : "pa####d get ewanne post ewapan"}, status=status.HTTP_201_CREATED)
@@ -241,12 +259,55 @@ class CreateCardView(generics.CreateAPIView):
     serializer_class = CardSerializer
     permission_classes = [AllowAny]
 
+    def publish_to_mqtt(self, topic, payload):
+        client = mqtt.Client(client_id=settings.MQTT_CLIENT_ID)
+        client.tls_set(
+            ca_certs=settings.MQTT_CA_PATH,
+            certfile=settings.MQTT_CERT_PATH,
+            keyfile=settings.MQTT_KEY_PATH,
+            tls_version=ssl.PROTOCOL_TLSv1_2,
+        )
+        client.connect(settings.MQTT_BROKER_URL, settings.MQTT_BROKER_PORT)
+        client.loop_start()
+        result = client.publish(topic, json.dumps(payload))
+        client.loop_stop()
+        client.disconnect()
+        return result
+
     def create(self, request, *args, **kwargs):
+        station_id = request.data.get("issued_station")
+        #station_num = get_object_or_404(Station, id=station_id).station_ID
+        #topic = settings.STATION_MQTT_TOPICS.get(str(station_id))
+        topic = "esp32/rfid_sub"
+        print(topic)
+
+        if not topic:
+            return Response({"error": "Invalid or missing station_id"}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Card created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+            card = serializer.save()
 
+            payload = {
+                "card_number": card.card_num,
+                "amount": card.balance,
+                "nic_number": getattr(card.nic_number, "nic_number", None)
+            }
+            print(payload)
+
+            try:
+                self.publish_to_mqtt(topic, payload)
+            except Exception as e:
+                return Response({
+                    "message": "Card created, but MQTT publish failed",
+                    "error": str(e),
+                    "data": serializer.data
+                }, status=status.HTTP_201_CREATED)
+
+            return Response({
+                "message": "Card created successfully",
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED)
         # If validation fails, return the error details
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -302,12 +363,11 @@ class TransactionListView(APIView):
             # Filter transactions for the specific date and station_id
             departing_transactions = Transaction.objects.filter(date__date=formatted_date, S_station=station_id)
             arriving_transactions = Transaction.objects.filter(date__date=formatted_date, E_station=station_id)
-            # Serialize the transactions
             departing_data = [
                 {
                     "card_num": transaction.card_num.card_num,
-                    "start_station": transaction.S_station,
-                    "end_station": transaction.E_station,
+                    "start_station": get_object_or_404(Station, station_ID=transaction.S_station).station_name + " (" + str(transaction.S_station) + ")",
+                    "end_station": get_object_or_404(Station, station_ID=transaction.E_station).station_name + " (" + str(transaction.E_station) + ")",
                     "date": transaction.date,
                     "amount": transaction.amount
                 }
@@ -317,14 +377,13 @@ class TransactionListView(APIView):
             arriving_data = [
                 {
                     "card_num": transaction.card_num.card_num,
-                    "start_station": transaction.S_station,
-                    "end_station": transaction.E_station,
+                    "start_station": get_object_or_404(Station, station_ID=transaction.S_station).station_name + " (" + str(transaction.S_station) + ")",
+                    "end_station": get_object_or_404(Station, station_ID=transaction.E_station).station_name + " (" + str(transaction.E_station) + ")",
                     "date": transaction.date,
                     "amount": transaction.amount
                 }
                 for transaction in arriving_transactions
             ]
-
             return Response({
                 "departing": departing_data,
                 "arriving": arriving_data
@@ -368,22 +427,34 @@ class PassengerRechargesView(APIView):
         except Card.DoesNotExist:
             return Response({"error": "No card found for this passenger"}, status=status.HTTP_404_NOT_FOUND)
         
-## mqtt-iot-core-intergration
 
-# Start the MQTT client
-mqtt_client = start_mqtt_client()
 
-class PublishMessageView(APIView):
+class AdminDailyReportView(APIView):
     permission_classes = [AllowAny]
+    def get(self, request):
+        today = datetime.today().date()
+        total_cards_issued_today = Card.objects.filter(issued_date=today).count()
+        total_passengers = Passenger.objects.count()
+        daily_revenue = Transaction.objects.filter(date__date=today).aggregate(total=Sum('amount'))['total'] or 0
+        start_of_month = today.replace(day=1)
+        monthly_revenue = Transaction.objects.filter(date__date__gte=start_of_month).aggregate(total=Sum('amount'))['total'] or 0
+        station_counts = Transaction.objects.values('S_station').annotate(count=Count('S_station'))
+        total_trips = sum([x['count'] for x in station_counts])
+        station_percentages = [
+            {
+                "station": entry['S_station'],
+                "percentage": (entry['count'] / total_trips) * 100 if total_trips > 0 else 0
+            } for entry in station_counts
+        ]
 
-    def post(self, request):
-        topic = settings.MQTT_TOPIC_PUB  # Use the topic from settings
-        message = request.data.get("message", "Hello ESP32!")  # Get the message from the request body
-        try:
-            mqtt_client.publish(topic, message)
-            return JsonResponse({"status": "Message published", "message": message}, status=200)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-    
+        response_data = {
+            "total_cards_issued_today": total_cards_issued_today,
+            "total_passengers": total_passengers,
+            "daily_revenue": daily_revenue,
+            "monthly_revenue": monthly_revenue,
+            "station_usage_percentages": station_percentages
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
     
 
