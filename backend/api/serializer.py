@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Passenger, Station, Card, Transaction, Recharge, TransportFees
+from .models import Passenger, Station, Card, Transaction, Recharge, TransportFees, Routes, Trains
 
 User = get_user_model()  # Get the custom User model
 
@@ -115,3 +115,18 @@ class TransportFeesSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransportFees
         fields = '__all__'
+
+
+
+class RouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Routes
+        fields = ['id', 'route_id', 'state', 'station_list']
+
+
+class TrainSerializer(serializers.ModelSerializer):
+    route = RouteSerializer(read_only=True)  # Nested representation (optional)
+
+    class Meta:
+        model = Trains
+        fields = ['id', 'train_name', 'last_station', 'route']

@@ -18,8 +18,8 @@ class Command(BaseCommand):
         driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
         # File paths
-        station_file = "railway/data/sri_lanka_railway_stations.csv"
-        distance_file = "railway/data/3yp - Sheet1.csv"
+        station_file = "api/data/sri_lanka_railway_stations.csv"
+        distance_file = "api/data/3yp - Sheet1.csv"
 
         # Step 1: Delete all existing data
         self.stdout.write("❌ Deleting all existing nodes and relationships...")

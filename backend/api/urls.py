@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
+from .views import StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
 
 urlpatterns = [
     path('passengers/new/', CreatePassengerView.as_view()),
@@ -18,4 +18,7 @@ urlpatterns = [
     path("recharges/", PassengerRechargesView.as_view(), name="passenger-recharges"),
     path('publish-message/', PublishMessageView.as_view(), name='publish_message'),
     path("admin/dashboard-stats", AdminDailyReportView.as_view(), name="admin-daily-report"),
+    path("paths/route/", FindRoute.as_view(), name="find_route_between_stations"),
+    path("create/routes/", CreateRouteView.as_view(), name="create_new_routes"),
+    path("station/list/", StationListView.as_view(), name="give_all_stations")
 ]

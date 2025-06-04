@@ -68,14 +68,16 @@ class TransportFees(models.Model):
 class Routes(models.Model):
     route_id = models.CharField(max_length=10)
     state = models.BooleanField()
-    train = models.ForeignKey(Trains)
     station_list = models.JSONField()
 
 
 class Trains(models.Model):
+    location = models.CharField(max_length=100)
     train_name = models.CharField(max_length=200)
-    last_station = models.ForeignKey(Station, on_delete=models.CASCADE)
-    route = models.ForeignKey(Routes)
+    last_station = models.CharField(max_length=10)
+    route = models.ForeignKey(Routes, on_delete=models.CASCADE, null=True)
+
+
 
 
 

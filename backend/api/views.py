@@ -13,10 +13,21 @@ from django.conf import settings
 from django.db.models import Sum, Count
 import json
 from django.utils.timezone import now
-from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge
-from .serializer import RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
+from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
+from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
 import paho.mqtt.client as mqtt
 import ssl
+from neo4j import GraphDatabase
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Setup Neo4j driver
+driver = GraphDatabase.driver(
+    os.getenv("NEO4J_URI"),
+    auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
+)
 
 User = get_user_model()
 
@@ -458,3 +469,57 @@ class AdminDailyReportView(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
     
 
+class FindRoute(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        start_station = request.data.get('from')
+        end_station = request.data.get('to')
+        if not start_station or not end_station:
+            return Response(
+                {"error": "Both 'from' and 'to' query parameters are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        query = """
+        MATCH 
+          (start:Station {name: $start_station})-[startRel:SERVES_ROUTE]->(),
+          (end:Station {name: $end_station})<-[endRel:SERVES_ROUTE]-()
+        WHERE startRel.route_id = endRel.route_id 
+          AND toInteger(startRel.sequence) < toInteger(endRel.sequence)
+        RETURN 
+          startRel.route_id AS route_id,
+          startRel.departure_time AS departure_time_from_start,
+          endRel.arrival_time AS arrival_time_at_end
+        ORDER BY startRel.departure_time
+        """
+
+        try:
+            with driver.session() as session:
+                result = session.run(query, start_station=start_station, end_station=end_station)
+                data = [record.data() for record in result]
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class CreateRouteView(generics.CreateAPIView):
+    queryset = Routes.objects.all()
+    serializer_class = RouteSerializer
+    permission_classes = [AllowAny]
+
+
+class CreateTrainView(generics.CreateAPIView):
+    queryset = Trains.objects.all()
+    serializer_class = TrainSerializer
+    permission_classes = [AllowAny]
+
+
+class StationListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        stations = Station.objects.all().values('station_ID', 'station_name')
+        return Response(stations)
