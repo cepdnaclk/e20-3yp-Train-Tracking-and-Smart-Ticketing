@@ -12,13 +12,11 @@
             <div class="logo">RailLink</div>
             <ul>
                 <li><a href="#introduction">Introduction</a></li>
-                <li><a href="#features">Features</a></li>
+                <li><a href="#feature">Features</a></li>
                 <li><a href="#solution-architecture">Solution Architecture</a></li>
-                <li><a href="#hardware-software1">Hardware & Software</a></li>
+                <li><a href="#hardware">Hardware & Software</a></li>
                 <li><a href="#testing">Testing</a></li>
-                <li><a href="#budget">Budget</a></li>
                 <li><a href="#team">Team</a></li>
-                <li><a href="#links">Links</a></li>
             </ul>
         </nav>
         <div class="project-title">
@@ -28,149 +26,224 @@
             </div>
         </div>        
     </header>
- 
-    <section id="introduction">
-        <div class="intro-container">
+<section id="introduction">
+  <div class="intro-container">
+    <div class="intro-flex">
+      <div class="intro-image-full">
+        <img src="scaner.jpg" alt="Smart Ticketing Scanner">
+      </div>
+      <div class="intro-text">
         <h2>Introduction</h2>
-        <p>A smart ticketing and navigation system for Sri Lanka Railways aims to modernize railway travel by introducing a seamless, digital experience for passengers.
-            The smart ticketing and navigation system for Sri Lanka Railways introduces a card-based system, allowing passengers to tap in and out at stations for a seamless travel experience. This eliminates paper tickets, reduces queues, and ensures efficient fare collection. The system also provides real-time train schedules and route guidance, making railway travel more convenient and modernized.</p>
-            <div class="intro-images">
-                <img src="image2.png" alt="Image 1">
-                <img src="image.png" alt="Image 2">
-            </div>
-        </section>
+        <p>
+          A smart ticketing and navigation system for Sri Lanka Railways aims to modernize railway travel by introducing a seamless, digital experience for passengers.
+          The smart ticketing and navigation system introduces a card-based system, allowing passengers to tap in and out at stations for a seamless travel experience.
+          This eliminates paper tickets, reduces queues, and ensures efficient fare collection. The system also provides real-time train schedules and route guidance,
+          making railway travel more convenient and modernized.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <section id="features">
-            <div class="section-container_f">
-                <h2>Features</h2>
-        
-                <h3>1. Smart Ticketing System</h3>
-                <ul>
-                    <li><strong>Card-Based Ticketing:</strong> Customers tap their smart card to enter and exit stations.</li>
-                    <li><strong>Automated Fare Deduction:</strong> Checks balance before entry and deducts fare upon exit.</li>
-                    <li><strong>Secure Authentication:</strong> Verifies passengers before granting access.</li>
-                </ul>
-        
-                <h3>2. Role-Based Dashboard</h3>
-                <ul>
-                    <li><strong>Customer Dashboard:</strong> Displays travel history and balance.</li>
-                    <li><strong>Station Dashboard:</strong> Enables station staff to monitor check-ins, train schedules.</li>
-                </ul>
-        
-                <h3>3. Real-Time Train Tracking & Notifications</h3>
-                <ul>
-                    <li><strong>Live Train Location Updates:</strong> Provides real-time train tracking for passengers.</li>
-                    <li><strong>Delay Notifications:</strong> Alerts users about train delays or schedule changes.</li>
-                </ul>
-        
-                <h3>4. Transaction Management & Fare Calculation</h3>
-                <ul>
-                    <li><strong>Transaction Logging:</strong> Records entry, exit, and fare deductions.</li>
-                    <li><strong>Recharge History:</strong> Stores passenger top-up transactions.</li>
-                </ul>
-        
-                <h3>5. Seamless User Experience</h3>
-                <ul>
-                    <li><strong>Contactless Entry & Exit:</strong> Passengers tap their card at gates for smooth access.</li>
-                    <li><strong>Intuitive Web Interface:</strong> User-friendly portal for passengers and station operators.</li>
-                </ul>
-        
-                <h3>6. Secure & Scalable System</h3>
-                <ul>
-                    <li><strong>Data Encryption & Security:</strong> .....</li>
-                    <li><strong>Scalability:</strong> System can expand to more railway lines and stations.</li>
-                </ul>
-        
-                <h3>7. Backend & Technology Stack</h3>
-                <ul>
-                    <li><strong>Django & React-Based System:</strong> Combines Django (backend) and React (frontend) for smooth performance.</li>
-                    <li><strong>Database Management:</strong> Efficiently stores user data, transactions, and train schedules.</li>
-                </ul>
-            </div>
-        </section>
-
-    <section id="solution-architecture">
-        <div class="architecture-container">
-            <h2>Solution Architecture</h2>
-            <div class="architecture-image">
-                <img src="solutionAc.png" alt="Solution Architecture Diagram">
-            </div>
-        </div>
-    </section>
+<section id = "feature">
+<div class="key-features">
+  <h2>Key Features</h2>
+  <div class="feature-grid">
+    <div class="feature-item">
+      <img src="icon1.jpg" alt="Real-Time Tracking Icon" />
+      <h3>Real-Time Tracking</h3>
+      <p>Live Train Location Updates: Provides real-time train tracking.</p>
+    </div>
+    <div class="feature-item">
+      <img src="icon2.png" alt="Smart Ticketing Icon" />
+      <h3>Smart Ticketing</h3>
+      <p>Card-Based Ticketing: Customers tap their smart card to enter and exit stations.</p>
+    </div>
+    <div class="feature-item">
+      <img src="icon3.png" alt="Smart Ticketing Icon" />
+      <h3>Transaction Records Management</h3>
+      <p>All ticketing activities are securely stored and retrievable</p>
+    </div>
+  </div>
+</div>
+</section>
 
 
+<section id="solution-architecture" class="solution-architecture">
+  <div class="sa-container">
+    <div class="sa-text">
+      <h2>Solution Architecture</h2>
+      <p>
+        This architecture integrates smart card scanning hardware, an ESP32-based embedded controller, and a cloud-based backend 
+        to manage secure and real-time communication between customers, station admins, and the central database system hosted on AWS.
+        It ensures efficient and scalable operation of the smart railway ticketing system.
+      </p>
+    </div>
+    <div class="sa-image">
+      <img src="s_a.png" alt="Solution Architecture Diagram">
+    </div>
+  </div>
+</section>
+
+<section id="hardware">
+  <div class="hardware-contauner"></div>
+  <h2>Hardware Components</h2>
+  <div class="hardware-grid">
+    <div class="hardware-item">
+      <img src="Relay_Module.jpg" alt="Relay Module">
+      <p><strong>Relay Module</strong><br>Used to control high voltage devices through microcontroller signals.</p>
+    </div>
+    <div class="hardware-item">
+      <img src="RFID.jpg" alt="RFID Reader">
+    <p><strong>RFID Scanner</strong><br>Reads from and writes to RFID smart cards for identifying and authenticating passengers, enabling secure and efficient usage of the smart card system.</p>
+    </div>
+    <div class="hardware-item">
+      <img src="lcd.png" alt="LCD Display">
+      <p><strong>LCD Display</strong><br>Displays real-time information such as ticket status, fare, or station details.</p>
+    </div>
+    <div class="hardware-item">
+      <img src="esp32.jpg" alt="ESP32 Microcontroller">
+      <p><strong>ESP32 Microcontroller</strong><br>Central controller that processes data, communicates with components, and connects to the cloud.</p>
+    </div>
+    <div class="hardware-item">
+      <img src="card.jpg" alt="RFID Cards">
+      <p><strong>RFID Cards</strong><br>Smart travel cards used by passengers for ticketing and entry/exit authentication.</p>
+    </div>
+
+    <div class="hardware-item">
+    <img src="i2c.jpg" alt="i2c">
+    <p><strong>I2C Communicator Module</strong><br>Enables I2C communication with the LCD, allowing efficient data transmission for displaying real-time information.</p>
+    </div>
+    <div class="hardware-item">
+      <img src="elec_s.jpg" alt="elec_s">
+    <p><strong>AC Electric Switch</strong><br>Controls the locking and unlocking of the electric gate by switching the AC power based on system commands.</p>
+</div>
+    <div class="hardware-item">
+    <img src="GPS _GSM .png" alt="gps">
+    <p><strong>GPS and GSM module</strong><br>Find the gps data and transmit.</p>
+    </div>
+      <div class="hardware-item">
+    <img src="converter.png" alt="converter">
+    <p><strong>I5v to 3.3v converter</strong><br>Convert 5v to 3.3v For secure operation of rfid scanner.</p>
+    </div>
+
+  </div>
+  <div class="design-section">
+  <h3>Device Design Overview</h3>
+  <div class="design-images">
+    <div class="design-item">
+      <img src="CAD.png" alt="CAD Design of Smart Ticketing Device">
+      <p><strong>RFID-Based Smart Ticketing Device – CAD Design</strong><br>3D model of the smart ticketing terminal showing the layout of key hardware components.</p>
+    </div>
+    <div class="design-item">
+      <img src="circuit_diagram.png" alt="Circuit Diagram">
+      <p><strong>Circuit Diagram</strong><br>Electronic schematic representing the wiring and connectivity of the smart ticketing system.</p>
+    </div>
+  </div>
+</div>
+
+</section>
+
+
+<section id="software-system" class="software-section">
+  <div class="software-container">
+    <h2>Software Workflow: Seamless Ticketing and Train Tracking in Action</h2>
     
-    <section id="hardware-software1">
-        <div class="section-container">
-            <section id="hardware-software">
-                <h2>Hardware</h2>
-                <div class="hardware">
-                    <img src="h1.jpg" alt="Image 1">
-                    <img src="h2.jpg" alt="Image 1">
-                    <img src="h3.png" alt="Image 1">
-                    <img src="h4.jpg" alt="Image 1">
-                    <img src="h5.jpg" alt="Image 1">
-                    <img src="h6.jpg" alt="Image 1">
-                </div>
-                <div class="software">
-                    <h2>Software</h2>
-                    <h2>About Our Software</h2>
-                    <p>Our software revolutionizes Sri Lanka’s railway ticketing system by introducing a <strong>smart card-based ticketing solution</strong> that ensures seamless and efficient travel. This <strong>role-based system</strong> provides two dashboards:</p>
-        
-                    <ul>
-                        <li ><strong style="font-size: large; color: blue;">Customer Dashboard</strong> – Allows passengers to look their travel and check balances.</li>
+    <div class="software-steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Smart Ticketing System</h3>
+        <p>
+          Passengers use a smart card to enter the train by tapping at the entry gate.
+          The system verifies the card, checks the balance, and grants access if the amount is sufficient.
+        </p>
+      </div>
 
-                        <img src="passenger_dash.jpg" alt="Image 1">
-                        <li><strong style="font-size: large; color: blue;">Station Dashboard</strong> – Enables station administrators to monitor train entries, transactions, and passenger movements.</li>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Real-Time Travel Monitoring</h3>
+        <p>
+          At the exit station, passengers tap the card again. The system calculates the fare, deducts it from the card balance, and logs the trip.
+        </p>
+      </div>
 
-                        <img src="sta_dash.jpg" alt="Image 1">
-                    </ul>
-        
-                    <h3>How It Works</h3>
-                    <ol>
-                        <li><strong>Smart Ticketing System:</strong> Passengers use a <strong>smart card</strong> to enter the train by tapping at the entry gate. The system verifies the card, checks the balance, and grants access if the amount is sufficient.</li>
-                        <li><strong>Real-Time Travel Monitoring:</strong> At the <strong>exit station</strong>, passengers tap the card again. The system calculates the fare, deducts the amount from the balance, and records the transaction.</li>
-                        <li><strong>Transaction & Data Management:</strong> The deducted fare is stored in the backend, and passengers can view their transaction history.</li>
-                    </ol>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Real-Time Train Tracking</h3>
+        <p>
+          GPS modules on each train transmit real-time location data to the backend. This allows passengers and station staff to monitor train positions, arrival times, and delays with up-to-date information.
+        </p>
+      </div>
 
-        
-                    <p>Our <strong>Smart Railway Ticketing & Navigation System</strong> is designed to make railway travel more efficient, secure, and user-friendly, providing a <strong>modern digital solution</strong> for Sri Lanka Railways. 🚆✨</p>
-                </div>
-            </section>
-            
-                </div>
-            
-            </section>
-        </div>
-    </section>
-    
-    <section id="testing">
-        <div class="section-container">
-            <h2>Testing</h2>
-            <p>We ensure that our system is reliable and robust by employing a combination of unit testing and integration testing.</p>
-            
-            <h3>Unit Testing</h3>
-            <p>Unit testing involves testing individual components or units of the system to ensure that they function as expected. Each function or method is tested in isolation to catch bugs early and ensure the integrity of the code.</p>
-        <p>We perform unit tests on the routing system to ensure that the correct pages are loaded when users navigate through the application. These tests help confirm that clicking on links or buttons correctly triggers the loading of the appropriate page, section, or view. We focus on the following routing scenarios:</p>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Transaction & Data Management</h3>
+        <p>
+          Transaction details are stored securely in the backend. Passengers can access travel and payment history through the dashboard.
+        </p>
+      </div>
+    </div>
+
+    <div class="software-summary">
+      <p>
+        Our <strong>Smart Railway Ticketing & Navigation System</strong> is built to make railway travel more <strong>efficient, secure, and user-friendly</strong>. 
+        It provides a modern digital solution for Sri Lanka Railways that meets the needs of both passengers and administrators. 🚆✨
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="testing-section" class="testing-section">
+  <div class="testing-container">
+    <h2>🔷 13. Software & Hardware Testing</h2>
+
+    <div class="testing-cards">
+      <!-- Front-End Testing -->
+      <div class="test-card">
+        <h3>Front-End Testing</h3>
         <ul>
-            <li><strong>Navigation Tests:</strong> Verifying that clicking on a navigation link correctly loads the corresponding section of the page.</li>
-            <li><strong>URL Matching:</strong> Ensuring that the URL dynamically updates and matches the appropriate section or page.</li>
-            <li><strong>Route Protection:</strong> Ensuring that specific routes or pages are protected or require authentication</li>
+          <li><strong>Tools:</strong> Jest & React Testing Library</li>
+          <li><strong>Unit Tests:</strong> Individual components and functions tested separately</li>
+          <li><strong>Integration Tests:</strong> Recharge form + balance update working together</li>
+          <li><strong>CI/CD:</strong> GitHub Actions for automated testing on every push/merge</li>
         </ul>
-            <h3>Integration Testing</h3>
-            <p>Integration testing ensures that the different modules and components of the system work together seamlessly. These tests help ensure that data flows correctly between modules and that the system operates as expected when different parts are integrated.</p>
-           
-            <p>Both unit testing and integration testing are crucial for maintaining high-quality code and ensuring that the system meets the required standards before deployment.</p>
-        </div>
-    </section>
+      </div>
+
+      <!-- Back-End Testing -->
+      <div class="test-card">
+        <h3>Back-End Testing</h3>
+        <ul>
+          <li><strong>Tool:</strong> Postman</li>
+          <li><strong>API Testing:</strong></li>
+          <ul>
+            <li>Passenger login & authentication</li>
+            <li>Card scan validation and response</li>
+            <li>Recharge and balance updates</li>
+          </ul>
+          <li>Tested data flow, response codes, and error handling</li>
+        </ul>
+      </div>
+
+      <!-- Hardware Testing -->
+      <div class="test-card">
+        <h3>Hardware Testing</h3>
+        <ul>
+          <li>Manual testing with ESP32 + RFID + Scanner</li>
+          <li><strong>Validated:</strong></li>
+          <ul>
+            <li>Card reading accuracy</li>
+            <li>Network reliability under load</li>
+          </ul>
+          <li>Monitored power consumption and device resets</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
     
-    
-    <section id="budget">
-        <div class="section-container">
-            <h2>Budget</h2>
-            <p>Project budget allocation...</p>
-        </div>
-    </section>
+
     
     <section id="team">
         <div class="section-container">
@@ -200,12 +273,6 @@
         </div>
     </section>
     
-    <section id="links">
-        <div class="section-container">
-            <h2>Links</h2>
-            <p>Important project links...</p>
-        </div>
-    </section>
     
 
     <footer>
