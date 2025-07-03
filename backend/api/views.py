@@ -31,6 +31,13 @@ driver = GraphDatabase.driver(
 
 User = get_user_model()
 
+
+def sort_by_departure_time(routes):
+    return sorted(
+        routes,
+        key=lambda x: datetime.strptime(x["departure_time_from_start"], "%H:%M").time()
+    )
+
 # ---- SIGNUP VIEWS ----
 class PassengerSignupView(APIView):
     permission_classes = [AllowAny]
@@ -470,10 +477,12 @@ class AdminDailyReportView(APIView):
     
 
 class FindRoute(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         start_station = request.data.get('from')
         end_station = request.data.get('to')
+
         if not start_station or not end_station:
             return Response(
                 {"error": "Both 'from' and 'to' query parameters are required."},
@@ -496,9 +505,24 @@ class FindRoute(APIView):
         try:
             with driver.session() as session:
                 result = session.run(query, start_station=start_station, end_station=end_station)
-                data = [record.data() for record in result]
+                neo4j_data = [record.data() for record in result]
 
-            return Response(data, status=status.HTTP_200_OK)
+            # Replace route_id with train_name using Django ORM
+            response_data = []
+            for entry in neo4j_data:
+                route_id = entry["route_id"]
+                try:
+                    train = Trains.objects.get(route=route_id)
+                    entry["train_name"] = train.train_name
+                    del entry["route_id"]
+                except Trains.DoesNotExist:
+                    entry["train_name"] = "Unknown Train"
+
+                response_data.append(entry)
+                
+            
+
+            return Response(sort_by_departure_time(response_data), status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -516,10 +540,111 @@ class CreateTrainView(generics.CreateAPIView):
     serializer_class = TrainSerializer
     permission_classes = [AllowAny]
 
-
 class StationListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         stations = Station.objects.all().values('station_ID', 'station_name')
         return Response(stations)
+    
+
+class TrainRouteDetailsView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        train_name = request.data.get("train_name")
+        if not train_name:
+            return Response({"error": "train_name is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            train = Trains.objects.get(train_name=train_name)
+        except Trains.DoesNotExist:
+            return Response({"error": "Train not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        route_id = train.route
+
+        # Query Neo4j for route stations with coordinates and IDs
+        neo_query = """
+            MATCH (s:Station)-[r:SERVES_ROUTE {route_id: $route_id}]->(next:Station)
+            RETURN 
+            s.station_id AS station_id,
+            s.name AS station_name,
+            s.latitude AS lat,
+            s.longitude AS lon,
+            toInteger(r.sequence) AS sequence
+            UNION
+            MATCH (s:Station)<-[r:SERVES_ROUTE {route_id: $route_id}]-(prev)
+            WHERE NOT (s)-[:SERVES_ROUTE {route_id: $route_id}]->()
+            RETURN 
+            s.station_id AS station_id,
+            s.name AS station_name,
+            s.latitude AS lat,
+            s.longitude AS lon,
+            toInteger(r.sequence) AS sequence
+            ORDER BY sequence
+        """
+
+        with driver.session() as session:
+            result = session.run(neo_query, route_id=route_id)
+            station_data = [record.data() for record in result]
+
+        if not station_data:
+            return Response({"error": "No stations found for this route"}, status=status.HTTP_404_NOT_FOUND)
+
+        first_station = station_data[0]
+        matched_station = None
+        for station in station_data:
+            if int(station["station_id"]) == int(train.last_station):
+                matched_station = station
+                break
+        response_data = {
+            "route_id": route_id,
+            "train_location": train.location,
+            "stations": station_data,
+            "starting_station": first_station,
+            "last_station": matched_station,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+
+class TrainLocationListView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        trains = Trains.objects.all()
+        data = [
+            {
+                "train_name": train.train_name,
+                "location": train.location
+            }
+            for train in trains
+        ]
+        return Response(data, status=status.HTTP_200_OK)
+    
+
+class ReceiveGPSView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        latitude = request.data.get("latitude")
+        longitude = request.data.get("longitude")
+        
+        if latitude and longitude:
+            print(f"Received GPS: lat={latitude}, lon={longitude}")
+            return Response({"message": "GPS received"}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+    
+class ReceiveLocationView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            name = data.get('name')
+            lat = data.get('lat')
+            lon = data.get('lon')
+
+            print(f"[Location Received] Name: {name}, Latitude: {lat}, Longitude: {lon}")
+
+            return JsonResponse({"status": "success", "message": "Location received."}, status=200)
+        except Exception as e:
+            print(f"[Error] {e}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)

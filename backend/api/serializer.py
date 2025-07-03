@@ -125,8 +125,6 @@ class RouteSerializer(serializers.ModelSerializer):
 
 
 class TrainSerializer(serializers.ModelSerializer):
-    route = RouteSerializer(read_only=True)  # Nested representation (optional)
-
     class Meta:
         model = Trains
-        fields = ['id', 'train_name', 'last_station', 'route']
+        fields = '__all__'

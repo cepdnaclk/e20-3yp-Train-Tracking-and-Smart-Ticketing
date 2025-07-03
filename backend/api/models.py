@@ -75,7 +75,7 @@ class Trains(models.Model):
     location = models.CharField(max_length=100)
     train_name = models.CharField(max_length=200)
     last_station = models.CharField(max_length=10)
-    route = models.ForeignKey(Routes, on_delete=models.CASCADE, null=True)
+    route = models.CharField(max_length=10)
 
 
 

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
+from .views import ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView, GetcarddetailsView,PublishMessageView
 
 urlpatterns = [
     path('passengers/new/', CreatePassengerView.as_view()),
@@ -20,5 +20,10 @@ urlpatterns = [
     path("admin/dashboard-stats", AdminDailyReportView.as_view(), name="admin-daily-report"),
     path("paths/route/", FindRoute.as_view(), name="find_route_between_stations"),
     path("create/routes/", CreateRouteView.as_view(), name="create_new_routes"),
-    path("station/list/", StationListView.as_view(), name="give_all_stations")
+    path("station/list/", StationListView.as_view(), name="give_all_stations"),
+    path("create/train/", CreateTrainView.as_view(), name="create_train"),
+    path("find/train/details/", TrainRouteDetailsView.as_view(), name="find_train_locations"),
+    path("trains/locations/", TrainLocationListView.as_view(), name="find_all_trains"),
+    path("get/gps/location/", ReceiveGPSView.as_view(), name="get_gps_locations"),
+    path("loc/", ReceiveLocationView.as_view(), name="location")
 ]
