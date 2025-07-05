@@ -2,4 +2,6 @@ envlin/
 backend/staticfiles/
 github-actions-key
 github-actions-key.pub
+__pycache__/
+*.py[cod]
 

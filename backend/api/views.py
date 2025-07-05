@@ -68,7 +68,7 @@ class AdminSignupView(APIView):
         serializer = AdminSignupSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Admin registered successfully"}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Admin registered successfully CICD IS WORKING"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ---- LOGIN VIEWS ----
