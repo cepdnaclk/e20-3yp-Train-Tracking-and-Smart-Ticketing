@@ -151,14 +151,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",          # for local development
-    "http://127.0.0.1:5173",          # optional for local
-    "http://54.83.76.56",             # your EC2 backend public IP
-    # "https://your-production-frontend.com",  # add if applicable
-]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = False  # Allow all only in development
+CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_ALL_ORIGINS = True # Allow all only in development
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
