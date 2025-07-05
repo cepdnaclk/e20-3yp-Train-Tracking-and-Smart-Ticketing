@@ -100,6 +100,7 @@ class UserLoginView(APIView):
                         "address": user.passenger_profile.address,
                         "email": user.passenger_profile.email,
                         "phone": user.passenger_profile.phone,
+                        "stat" : "test---000"
                     }
                 elif user.user_type == 'station':
                     response_data["profile"] = {
