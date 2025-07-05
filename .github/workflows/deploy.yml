@@ -22,7 +22,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@54.83.76.56 "
           cd ~/e20-3yp-Train-Tracking-and-Smart-Ticketing &&
-          git pull origin deployment &&
+          git pull origin dep &&
           source env/bin/activate &&
           pip install -r requirements.txt &&
           python manage.py migrate &&
