@@ -1,0 +1,35 @@
+name: 🚀 Deploy to EC2 on push to deployment
+
+on:
+  push:
+    branches:
+      - deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACB2o7U1zEFVM4bRbdRjTVoUPPgqo/4HPqZopKMKYn4IpgAAAJhAhIokQISK
+JAAAAAtzc2gtZWQyNTUxOQAAACB2o7U1zEFVM4bRbdRjTVoUPPgqo/4HPqZopKMKYn4Ipg
+AAAEDgTX8l29dNieoL1uGB2fO5tAP/V7/A2qcprqMGrCYjb3ajtTXMQVUzhtFt1GNNWhQ8
++Cqj/gc+pmikowpifgimAAAAFWdpdGh1Yi1hY3Rpb25zLWRlcGxveQ== }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@54.83.76.56 "
+          cd ~/e20-3yp-Train-Tracking-and-Smart-Ticketing &&
+          git pull origin deployment &&
+          source env/bin/activate &&
+          pip install -r requirements.txt &&
+          python manage.py migrate &&
+          python manage.py collectstatic --noinput &&
+          sudo systemctl restart gunicorn
+        "
