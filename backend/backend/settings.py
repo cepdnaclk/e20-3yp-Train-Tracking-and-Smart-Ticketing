@@ -52,6 +52,7 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",  
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,7 +61,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api",
     "rest_framework",
-    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -151,13 +151,18 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Allow all only in development
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",          # for local development
+    "http://127.0.0.1:5173",          # optional for local
+    "http://54.83.76.56",             # your EC2 backend public IP
+    # "https://your-production-frontend.com",  # add if applicable
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False  # Allow all only in development
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-
-CORS_ALLOW_CREDENTIALS = False # Required if using authentication
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"] # Required if using authentication
 CORS_ALLOW_HEADERS = ["*"]  # Allow all headers
 
