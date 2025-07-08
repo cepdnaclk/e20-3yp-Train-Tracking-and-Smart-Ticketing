@@ -1,0 +1,341 @@
+Colombo Fort,500
+Idalgashinna,501
+Puttalam,502
+Maradana,503
+Haputale,504
+Noor Nagar,505
+Dematagoda,506
+Diyathalawa,507
+Kelaniya,508
+Bandarawela,509
+Girambe,510
+Wanawasala,511
+Kinigama,512
+Thalawattegedara,513
+Hunupitiya,514
+Heeloya,515
+Pothuhera,516
+Enderamulla,517
+Kithal Ella,518
+Nailiya,519
+Horape,520
+Ella,521
+Kurunegala,522
+Ragama,523
+Demodara,524
+Muthtettugala,525
+Walpola,526
+Uduwara,527
+Wellawa,528
+Batuwatta,529
+Hali Ela,530
+Ganewatta,531
+Bulugahagoda,532
+Badulla,533
+Hiriyala,534
+Ganemulla,535
+Nagollagama,536
+Yagoda,537
+Sarasavi Uyana,538
+Thimbiriyagedara,539
+Gampaha,540
+Kandy,541
+Maho Jnc,542
+Daraluwa,543
+Mahaiyawa,544
+Randenigama,545
+Bemmulla,546
+Katugastota,547
+Ambanpola,548
+Magalegoda,549
+Pallethalawinna,550
+Galgamuwa,551
+Heen - Patti,552
+Udathalawinna,553
+Senarathgama,554
+Veyangoda,555
+Meegammana,556
+Thambuttegama,557
+Wandurawa,558
+Wattegama,559
+Talawa,560
+Keenawala,561
+Pathanpaha,562
+Shrawasthipura,563
+Pallewela,564
+Udaththawala,565
+Pura New Town,566
+Ganegoda,567
+Ukuwela,568
+Anuradhapura,569
+Wijaya Rajadahana,570
+Matale,571
+Mihintale Jnc,572
+Mirigama,573
+Mihintale,574
+Wilwatta,575
+Peralanda,576
+Saliyapura,577
+Bothale,578
+Kandana,579
+Parasangaswewa,580
+Ambepussa,581
+Kapuwatta,582
+Medagama,583
+Yattalgoda,584
+Ja-Ela,585
+Bujjomuwa,586
+Thudella,587
+Punewa,588
+Alawwa,589
+Kudahakapola,590
+Irattaperiyakulam,591
+Walakumbura,592
+Alawathupitiya,593
+Vavniya,594
+Polgahawela,595
+Seeduwa,596
+Tandikulam,597
+Panaliya,598
+Liyanagemulla,599
+Omanthei,600
+Thismalpola,601
+Industrial Zone,602
+Puliyankulama,603
+Yatagama,604
+Katunayake,605
+Mankulam,606
+Rambukkana,607
+100.00 Murukandi,608
+Kadigamuwa,609
+Kurana,610
+Araviyanagar,611
+Gangoda,612
+Negambo,613
+Kilinochchi,614
+Ihala Kotte,615
+Kattuwa,616
+Paranthan,617
+Balana,618
+Kochchikade,619
+Eliphant Pass,620
+Kadugannawa,621
+Waikkala,622
+Palai,623
+Pilimathalawa,624
+Bolawatta,625
+Eluthumattuwal,626
+Peradeniya Jnc,627
+Boralessa,628
+Mirusuwil,629
+Koshinna,630
+Lunuwila,631
+Kodikamam,632
+Gelioya,633
+Thummodara,634
+Mesalai,635
+Gampola,636
+Naththandiya,637
+Sankathanai,638
+Thembiligala,639
+Walahapitiya,640
+Chawakachcheri,641
+Ulapane,642
+Kudawewa,643
+Thachchanthoppu,644
+Navalapitiya,645
+Nelumpokuna,646
+Navatkuli,647
+Inguruoya,648
+Madampe,649
+Pungankulam,650
+Galboda,651
+Kakkapalliya,652
+Jaffna,653
+Watawala,654
+Sawarana,655
+Kokavil,656
+Ihala Watawala,657
+Chilaw,658
+Kondavil,659
+Rozella,660
+Manuwangama,661
+Inuvil,662
+Hatton,663
+Bangadeniya,664
+Chunnakam,665
+Kotagala,666
+Arachchikattuwa,667
+Mallakam,668
+Thalawakele,669
+Anawilundawa,670
+Thellipalai,671
+Watagoda,672
+Baththuluoya,673
+Mavittapuram,674
+Great Western,675
+Pulichchakulama,676
+Kankasnthurai,677
+Radella,678
+Mundalama,679
+Nanuoya,680
+Mangalaeliya,681
+Neriyakulam,682
+Perakumpura,683
+Madurankuliya,684
+Weddikulam,685
+Ambewela,686
+Irukkulampiddi Nagawillu,687
+Madu Road,688
+Pattipola,689
+Palavi,690
+Murukkan,691
+Ohiya,692
+Thilladiya,693
+Mathottam,694
+Thirukethiswaram,695
+Train Holt 1,696
+Udahamulla,697
+Mannar,698
+Katutara North,699
+Navinna,700
+Thoddaveli,701
+Katutara South,702
+Maharagama,703
+Pesalai,704
+Katukurunda,705
+Pannipitiya,706
+Thalaimannar,707
+Payagala North,708
+Kottawa,709
+Talaimannar Pier,710
+Payagala South,711
+Makumbura,712
+Maggona,713
+Hospital-Homagama,714
+Konwewa,715
+Beruwala,716
+Homagama,717
+Ranamukgama,718
+Hettimulla,719
+Panagoda,720
+Moragollagama,721
+Aluthgama,722
+Godagama,723
+300.00 Bentota,724
+Megoda,725
+Negama,726
+Induruwa,727
+Watareka,728
+Awkana,729
+Maha Induruwa,730
+Padukka,731
+Kalawewa,732
+Kosgoda,733
+Arukwatta,734
+Kekirawa,735
+Piyagama,736
+Angampitiya,737
+Horiwila,738
+Ahungalla,739
+Uggalla,740
+Palugaswewa,741
+Pathegamgoda,742
+Pinnawala,743
+Habarana,744
+Balapitiya,745
+Gammana,746
+Hathares Kotuwa,747
+Andadola,748
+Morakele,749
+Galoya Jnc,750
+Kandegoda,751
+Waga,752
+Minneriya,753
+Ambalangoda,754
+Kadugoda,755
+Hingurakgoda,756
+Madampagama,757
+Kosgama,758
+Jayanthipura,759
+Akurala,760
+Puwakpitiya,761
+Laksha Uyana,762
+Kahawe,763
+Avissawella,764
+Perakum Uyana,765
+Thelwatta,766
+Polonnaruwa,767
+Sinigama,768
+Gallella,769
+Hikkaduwa,770
+Manampitiya,771
+Thiranagama,772
+Sewanapitiya,773
+Kumarakanda,774
+Welikanda,775
+Dodanduwa,776
+Ridithenna,777
+Rathgama,778
+Punani,779
+Bussa,780
+Kadadasi Nagar,781
+Gintota,782
+Walachchena,783
+Piyadigama,784
+Kalkuda,785
+Richmond Hill,786
+Dewapuram,787
+Galle,788
+Vandaramulle,789
+Katugoda,790
+Eravur,791
+Unawatuna,792
+Baticaloa,793
+Talpe,794
+Habaraduwa,795
+Aluthoya,796
+Koggala,797
+Agbopura,798
+Kathaluwa,799
+Kantale,800
+Ahangama,801
+Mollipothana,802
+Medigama,803
+440.00 Kumbalgama,804
+China Bay,805
+Weligama,806
+Tricomalee,807
+Polwathumodara,808
+Mirissa,809
+Secretarial,810
+Kamburugamuwa,811
+Kompannavidiya,812
+Walgama,813
+Kollupitiya,814
+Matara,815
+Bambalapitiya,816
+Piliduwa,817
+Wellawatta,818
+Weherahena,819
+Dehiwala,820
+Kekanadura,821
+Mount Lavinia,822
+Bmbarenda,823
+Ratmalana,824
+Wewurukannala,825
+Angulana,826
+Beliatta,827
+Lunawa,828
+Moratuwa,829
+Baselin Road,830
+Koralawella,831
+Cotta Road,832
+Egoda Uyana,833
+Narahenpita,834
+Panadura,835
+Kirulapana,836
+Pinwatta,837
+Nugegoda,838
+Wadduwa,839
+Pengiriwatta,840

@@ -98,6 +98,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -106,6 +107,17 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
+    }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'train_ticketing',
+        'USER': 'root',
+        'PASSWORD': 'Psl678@234',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -154,14 +166,19 @@ CORS_ALLOW_CREDENTIALS = False # Required if using authentication
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"] # Required if using authentication
 CORS_ALLOW_HEADERS = ["*"]  # Allow all headers
 
-AUTH_USER_MODEL = 'api.User'  # Replace 'your_app_name' with the actual app name 
+AUTH_USER_MODEL = 'api.User'  # Replace 'your_app_name' with the actual app name
 
 # mqtt broker settings
 MQTT_BROKER_URL = os.getenv("MQTT_BROKER_URL", "a2v3g8yh48u9ya-ats.iot.ap-south-1.amazonaws.com")  # Replace with your MQTT broker URL
 MQTT_BROKER_PORT = int(os.getenv("MQTT_BROKER_PORT", 8883))         # Default MQTT port
-MQTT_TOPIC_SUB = os.getenv("MQTT_TOPIC", "esp32/rfid_pub")          # Topic to subscribe
-MQTT_TOPIC_PUB = os.getenv("MQTT_TOPIC_PUB", "esp32/rfid_sub")    # Topic to publish
+#MQTT_TOPIC_SUB = os.getenv("MQTT_TOPIC", "esp32/station_500_pub")          # Topic to subscribe
 MQTT_CERT_PATH = os.getenv("MQTT_CERT_PATH", './certs/50ed857801d1277db1cf867590deed042ec7c6c6b98792f8afbe4c0cb0df66a1-certificate.pem.crt')  # Path to device certificate
 MQTT_KEY_PATH = os.getenv("MQTT_KEY_PATH", './certs/50ed857801d1277db1cf867590deed042ec7c6c6b98792f8afbe4c0cb0df66a1-private.pem.key')  # Path to private key
 MQTT_CA_PATH = os.getenv("MQTT_CA_PATH", './certs/AmazonRootCA1.pem')  # Path to Amazon Root CA
 MQTT_CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "DjangoBackend")
+
+# List of wildcard topics to subscribe to (station + gps)
+MQTT_SUBSCRIBE_TOPICS = [
+    "esp32/stationpub/#",   # All station pub topics
+    "gps/#",                 # All GPS topics (multi-level)
+]

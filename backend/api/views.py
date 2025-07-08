@@ -10,7 +10,8 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 from rest_framework import generics
 from django.conf import settings
-
+import json
+from .helper import process_task_id_3
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge
 from .serializer import RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
 from .mqtt_client import start_mqtt_client
@@ -23,10 +24,28 @@ class PassengerSignupView(APIView):
 
 
     def post(self, request):
+        print("Passenger signup")
         print(request.data)
         serializer = PassengerSignupSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            station_id = str(request.data.get("station_ID"))
+            station_topics = getattr(settings, "STATION_MQTT_TOPICS", {})
+            topic = station_topics.get(station_id)
+            print("topic: ",topic)
+            passenger = serializer.save()
+            #topic = "esp32/rfid_sub"
+            if topic:
+                payload = {
+                        "task_id": 1,
+                        "nic_number": passenger.nic_number,
+                        "station_id": passenger.station_id,
+                    }
+                '''print(f"Publishing to topic: {topic}")
+                print(f"Payload: {json.dumps(payload)}")
+                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                print(f"Publish result: {result.rc}")  # 0 means success'''
+            else:
+                print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Passenger registered successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -70,7 +89,6 @@ class UserLoginView(APIView):
                     "access": str(refresh.access_token),
                     "user_type": user.user_type
                 }
-
                 if user.user_type == 'passenger':
                     response_data["profile"] = {
                         "nic_number": user.passenger_profile.nic_number,
@@ -123,78 +141,19 @@ class CreateStationView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetcarddetailsView(APIView):
-    permission_classes = [AllowAny]
     def post(self, request):
-        print(request.data)
-        task_ID  = request.data.get('task_id')
+        task_ID = request.data.get('task_id')
 
+        if task_ID == 3:
+            result = process_task_id_3(request.data)
+            if "error" in result:
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+            return Response(result, status=status.HTTP_200_OK)
 
-        if task_ID == 1:
-            card_num = request.data.get('uid')
-            try:
-                card = Card.objects.get(card_num=card_num)
-                response_data = {
-                    "nic": card.nic_number.nic_number,
-                    "amount": card.balance
-                }
-                return Response(response_data, status=status.HTTP_200_OK)
-            except Card.DoesNotExist:
-                return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
-            
+        return Response({"error": "Invalid task_id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        elif task_ID == 2:
-            nic = request.data.get('nic')
-            if not nic:
-                return Response({"error": "Card is invalid_0"}, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                passenger = Passenger.objects.get(nic_number=nic)
-                card = Card.objects.get(nic_number=passenger)
-                return Response({"message": "Card is valid",}, status=status.HTTP_200_OK)
-            except Passenger.DoesNotExist:
-                return Response({"error": "Card is invalid_1"}, status=status.HTTP_404_NOT_FOUND)
-            except Card.DoesNotExist:
-                return Response({"error": "Card is invalid_2"}, status=status.HTTP_404_NOT_FOUND)
-        
-
-        elif task_ID == 3:
-            nic = request.data.get('nic')
-            start = request.data.get('station_id')
-            end = request.data.get('this_station')
-            amount = request.data.get('amount')
-            try:
-                min_station = min(int(start), int(end))
-                max_station = max(int(start), int(end))
-                route = str(min_station) + "-" + str(max_station)
-                try:
-                    price = TransportFees.objects.get(route=route).amount
-                    new_amount = int(amount - price)
-                    passenger = Passenger.objects.get(nic_number=nic)
-                    card = Card.objects.get(nic_number=passenger)
-                    card.balance = new_amount
-                    card.save()
-                except TransportFees.DoesNotExist:
-                    return Response({"error": "Route not found"}, status=status.HTTP_404_NOT_FOUND)
-                passenger = Passenger.objects.get(nic_number=nic)
-                card = Card.objects.get(nic_number=passenger)
-                transaction = Transaction.objects.create(
-                    card_num=card,
-                    S_station=start,
-                    E_station=end,
-                    amount=price
-                )
-                transaction.save()
-                return Response({"new_amount": new_amount}, status=status.HTTP_200_OK)
-            except Passenger.DoesNotExist:
-                return Response({"error": "Passenger with this NIC does not exist"}, status=status.HTTP_404_NOT_FOUND)
-            except Card.DoesNotExist:
-                return Response({"error": "No card found for this NIC"}, status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    
     def get(self, request):
-        return Response({"error" : "pa####d get ewanne post ewapan"}, status=status.HTTP_201_CREATED)
-        
+        return Response({"error": "send post"}, status=status.HTTP_201_CREATED)
         
 class PassengerAndCardDetailsView(APIView):
     permission_classes = [AllowAny]
@@ -244,7 +203,24 @@ class CreateCardView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            card = serializer.save()
+            station_id = card.issued_station.station_ID
+            station_topics = getattr(settings, "STATION_MQTT_TOPICS", {})
+            topic = station_topics.get(station_id)
+            print("topic: ",topic)
+            
+            if topic:
+                payload = {
+                        "task_id": 1,
+                        "nic": card.nic_number.nic_number,
+                        "amount": card.balance,
+                    }
+                print(f"Publishing to topic: {topic}")
+                print(f"Payload: {json.dumps(payload)}")
+                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                print(f"Publish result: {result.rc}")  # 0 means success
+            else:
+                print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Card created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
 
         # If validation fails, return the error details
@@ -272,6 +248,21 @@ class RechargeCardView(APIView):
                 amount=new_balance,
                 station=station
             )
+            topic = f"esp32/stationsub/{station_id}"
+            print("topic: ",topic)
+            
+            if topic:
+                payload = {
+                        "task_id": 1,
+                        "nic": card.nic_number.nic_number,
+                        "amount": card.balance,
+                    }
+                print(f"Publishing to topic: {topic}")
+                print(f"Payload: {json.dumps(payload)}")
+                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                print(f"Publish result: {result.rc}")  # 0 means success
+            else:
+                print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Balance updated successfully", "balance": card.balance}, status=status.HTTP_200_OK)
         except Card.DoesNotExist:
             return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -335,11 +326,11 @@ class TransactionListView(APIView):
 
 
 class PassengerTransactionsView(APIView):
-    permission_classes = [AllowAny]    
+    permission_classes = [AllowAny]
     def get(self, request):
-        passenger_id = request.GET.get('passenger_id')       
+        passenger_id = request.GET.get('passenger_id')
         if not passenger_id:
-            return Response({"error": "Passenger ID is required"}, status=400)     
+            return Response({"error": "Passenger ID is required"}, status=400)
         try:
             passenger = get_object_or_404(Passenger, nic_number=passenger_id)
             card = get_object_or_404(Card, nic_number=passenger)
@@ -373,17 +364,23 @@ class PassengerRechargesView(APIView):
 # Start the MQTT client
 mqtt_client = start_mqtt_client()
 
+'''import logging
+logging.basicConfig(level=logging.DEBUG)
+mqtt_client.enable_logger()'''
+
 class PublishMessageView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        topic = settings.MQTT_TOPIC_PUB  # Use the topic from settings
-        message = request.data.get("message", "Hello ESP32!")  # Get the message from the request body
         try:
-            mqtt_client.publish(topic, message)
-            return JsonResponse({"status": "Message published", "message": message}, status=200)
+            message = request.data
+            station_id = str(message.get("station_id"))
+            station_topics = getattr(settings, "STATION_MQTT_TOPICS", {})
+            topic = station_topics.get(station_id)
+            if not topic:
+                return JsonResponse({"error": "Invalid or missing station_id"}, status=400)
+            payload_json = json.dumps(message)
+            mqtt_client.publish(topic, payload_json)
+            return JsonResponse({"status": "Message published", "topic": topic, "payload": message}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
-    
-    
-

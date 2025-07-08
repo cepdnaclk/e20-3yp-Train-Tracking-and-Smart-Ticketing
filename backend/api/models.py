@@ -17,19 +17,20 @@ class User(AbstractUser):
         return self.username
 
 class Passenger(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="passenger_profile")
-    nic_number = models.CharField(unique=True, max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="passenger_profile", null=True, blank=True)
+    nic_number = models.CharField(unique=True, max_length=20, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     dob = models.DateField()
     address = models.CharField(max_length=200)
     email = models.EmailField(unique=True, null=True, blank=True)
     phone = models.CharField(max_length=15)
+    station_id = models.CharField(max_length=20, null=True, blank=True)  # Station which the passenger was registered firls
 
 
 class Station(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="station_profile")
-    station_ID = models.CharField(unique=True, max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="station_profile", null=True, blank=True)
+    station_ID = models.CharField(unique=True, max_length=20, null=True, blank=True)
     station_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, null=True, blank=True)
     phone = models.CharField(max_length=15)

@@ -1,0 +1,342 @@
+From,To,Distance_km,Class_1st_Rs,Class_2nd_Rs,Class_3rd_Rs
+Colombo Fort,Colombo Fort,0.0,0.0,0.0,0.0
+Colombo Fort,Idalgashinna,240.56,1600.0,800.0,400.0
+Colombo Fort,Puttalam,135.12,1050.0,550.0,260.0
+Colombo Fort,Maradana,1.9,100.0,50.0,20.0
+Colombo Fort,Haputale,247.97,1600.0,800.0,400.0
+Colombo Fort,Noor Nagar,139.1,1050.0,550.0,280.0
+Colombo Fort,Dematagoda,3.67,100.0,50.0,20.0
+Colombo Fort,Diyathalawa,253.08,1650.0,850.0,420.0
+Colombo Fort,Kelaniya,6.87,100.0,50.0,20.0
+Colombo Fort,Bandarawela,259.15,1650.0,850.0,420.0
+Colombo Fort,Girambe,79.29,700.0,350.0,180.0
+Colombo Fort,Wanawasala,8.68,100.0,50.0,40.0
+Colombo Fort,Kinigama,261.45,1700.0,850.0,420.0
+Colombo Fort,Thalawattegedara,81.12,700.0,350.0,180.0
+Colombo Fort,Hunupitiya,10.03,150.0,100.0,40.0
+Colombo Fort,Heeloya,265.37,1700.0,850.0,420.0
+Colombo Fort,Pothuhera,86.27,750.0,400.0,200.0
+Colombo Fort,Enderamulla,11.7,150.0,100.0,40.0
+Colombo Fort,Kithal Ella,269.73,1700.0,850.0,440.0
+Colombo Fort,Nailiya,91.67,800.0,400.0,200.0
+Colombo Fort,Horape,14.04,150.0,100.0,40.0
+Colombo Fort,Ella,271.59,1750.0,900.0,440.0
+Colombo Fort,Kurunegala,95.27,800.0,400.0,200.0
+Colombo Fort,Ragama,15.55,200.0,100.0,40.0
+Colombo Fort,Demodara,277.72,1750.0,900.0,440.0
+Colombo Fort,Muthtettugala,97.76,850.0,450.0,220.0
+Colombo Fort,Walpola,18.12,200.0,100.0,60.0
+Colombo Fort,Uduwara,283.22,1800.0,900.0,440.0
+Colombo Fort,Wellawa,105.0,900.0,450.0,220.0
+Colombo Fort,Batuwatta,19.08,200.0,100.0,60.0
+Colombo Fort,Hali Ela,286.6,1800.0,900.0,460.0
+Colombo Fort,Ganewatta,116.72,950.0,500.0,240.0
+Colombo Fort,Bulugahagoda,20.73,250.0,150.0,60.0
+Colombo Fort,Badulla,292.39,1800.0,900.0,460.0
+Colombo Fort,Hiriyala,123.46,1000.0,500.0,240.0
+Colombo Fort,Ganemulla,22.52,250.0,150.0,60.0
+Colombo Fort,Nagollagama,129.05,1000.0,500.0,260.0
+Colombo Fort,Yagoda,24.32,250.0,150.0,80.0
+Colombo Fort,Sarasavi Uyana,115.69,950.0,500.0,240.0
+Colombo Fort,Thimbiriyagedara,132.93,1050.0,550.0,260.0
+Colombo Fort,Gampaha,27.54,300.0,150.0,80.0
+Colombo Fort,Kandy,120.74,950.0,500.0,240.0
+Colombo Fort,Maho Jnc,138.59,1050.0,550.0,280.0
+Colombo Fort,Daraluwa,29.92,300.0,150.0,80.0
+Colombo Fort,Mahaiyawa,122.4,1000.0,500.0,240.0
+Colombo Fort,Randenigama,141.92,1100.0,550.0,280.0
+Colombo Fort,Bemmulla,31.91,350.0,200.0,80.0
+Colombo Fort,Katugastota,126.29,1000.0,500.0,260.0
+Colombo Fort,Ambanpola,150.26,1150.0,600.0,280.0
+Colombo Fort,Magalegoda,34.16,350.0,200.0,100.0
+Colombo Fort,Pallethalawinna,127.66,1000.0,500.0,260.0
+Colombo Fort,Galgamuwa,160.24,1200.0,600.0,300.0
+Colombo Fort,Heen - Patti,35.67,400.0,200.0,100.0
+Colombo Fort,Udathalawinna,128.78,1000.0,500.0,260.0
+Colombo Fort,Senarathgama,170.08,1250.0,650.0,320.0
+Colombo Fort,Veyangoda,37.48,400.0,200.0,100.0
+Colombo Fort,Meegammana,130.69,1000.0,500.0,260.0
+Colombo Fort,Thambuttegama,178.96,1300.0,650.0,320.0
+Colombo Fort,Wandurawa,39.33,400.0,200.0,100.0
+Colombo Fort,Wattegama,132.89,1050.0,550.0,260.0
+Colombo Fort,Talawa,189.94,1350.0,700.0,340.0
+Colombo Fort,Keenawala,41.63,450.0,250.0,120.0
+Colombo Fort,Pathanpaha,137.42,1050.0,550.0,260.0
+Colombo Fort,Shrawasthipura,198.4,1400.0,700.0,360.0
+Colombo Fort,Pallewela,43.91,450.0,250.0,120.0
+Colombo Fort,Udaththawala,141.77,1100.0,550.0,280.0
+Colombo Fort,Pura New Town,202.06,1400.0,700.0,360.0
+Colombo Fort,Ganegoda,46.21,500.0,250.0,120.0
+Colombo Fort,Ukuwela,143.02,1100.0,550.0,280.0
+Colombo Fort,Anuradhapura,204.94,1450.0,750.0,360.0
+Colombo Fort,Wijaya Rajadahana,49.1,500.0,250.0,120.0
+Colombo Fort,Matale,148.61,1150.0,600.0,280.0
+Colombo Fort,Mihintale Jnc,206.44,1450.0,750.0,360.0
+Colombo Fort,Mirigama,50.27,500.0,250.0,140.0
+Colombo Fort,Mihintale,219.94,1500.0,750.0,380.0
+Colombo Fort,Wilwatta,52.11,550.0,300.0,140.0
+Colombo Fort,Peralanda,17.08,200.0,100.0,60.0
+Colombo Fort,Saliyapura,210.67,1450.0,750.0,360.0
+Colombo Fort,Bothale,54.43,550.0,300.0,140.0
+Colombo Fort,Kandana,18.83,200.0,100.0,60.0
+Colombo Fort,Parasangaswewa,217.73,1500.0,750.0,380.0
+Colombo Fort,Ambepussa,56.22,550.0,300.0,140.0
+Colombo Fort,Kapuwatta,20.56,250.0,150.0,60.0
+Colombo Fort,Medagama,221.2,1500.0,750.0,380.0
+Colombo Fort,Yattalgoda,59.85,600.0,300.0,140.0
+Colombo Fort,Ja-Ela,22.15,250.0,150.0,60.0
+Colombo Fort,Bujjomuwa,61.87,600.0,300.0,160.0
+Colombo Fort,Thudella,23.93,250.0,150.0,60.0
+Colombo Fort,Punewa,237.65,1600.0,800.0,400.0
+Colombo Fort,Alawwa,65.67,600.0,300.0,160.0
+Colombo Fort,Kudahakapola,25.18,250.0,150.0,80.0
+Colombo Fort,Irattaperiyakulam,249.04,1650.0,850.0,420.0
+Colombo Fort,Walakumbura,69.78,650.0,350.0,160.0
+Colombo Fort,Alawathupitiya,26.5,300.0,150.0,80.0
+Colombo Fort,Vavniya,254.36,1650.0,850.0,420.0
+Colombo Fort,Polgahawela,73.83,650.0,350.0,180.0
+Colombo Fort,Seeduwa,28.06,300.0,150.0,80.0
+Colombo Fort,Tandikulam,257.08,1650.0,850.0,420.0
+Colombo Fort,Panaliya,77.87,700.0,350.0,180.0
+Colombo Fort,Liyanagemulla,30.12,300.0,150.0,80.0
+Colombo Fort,Omanthei,267.13,1700.0,850.0,440.0
+Colombo Fort,Thismalpola,78.95,700.0,350.0,180.0
+Colombo Fort,Industrial Zone,32.33,350.0,200.0,80.0
+Colombo Fort,Puliyankulama,278.31,1750.0,900.0,440.0
+Colombo Fort,Yatagama,82.56,750.0,400.0,180.0
+Colombo Fort,Katunayake,32.45,350.0,200.0,80.0
+Colombo Fort,Mankulam,299.56,1850.0,950.0,460.0
+Colombo Fort,Rambukkana,84.44,750.0,400.0,200.0
+Colombo Fort,100.00 Murukandi,316.43,1950.0,1000.0,480.0
+Colombo Fort,Kadigamuwa,90.24,800.0,400.0,200.0
+Colombo Fort,Kurana,35.31,350.0,200.0,100.0
+Colombo Fort,Araviyanagar,320.0,1950.0,1000.0,480.0
+Colombo Fort,Gangoda,93.81,800.0,400.0,200.0
+Colombo Fort,Negambo,38.85,400.0,200.0,100.0
+Colombo Fort,Kilinochchi,330.32,2000.0,1000.0,500.0
+Colombo Fort,Ihala Kotte,96.08,850.0,450.0,220.0
+Colombo Fort,Kattuwa,42.14,450.0,250.0,120.0
+Colombo Fort,Paranthan,335.75,2000.0,1000.0,500.0
+Colombo Fort,Balana,101.07,850.0,450.0,220.0
+Colombo Fort,Kochchikade,45.05,450.0,250.0,120.0
+Colombo Fort,Eliphant Pass,342.76,2050.0,1050.0,520.0
+Colombo Fort,Kadugannawa,105.54,900.0,450.0,220.0
+Colombo Fort,Waikkala,46.65,500.0,250.0,120.0
+Colombo Fort,Palai,357.72,2100.0,1050.0,540.0
+Colombo Fort,Pilimathalawa,109.45,900.0,450.0,240.0
+Colombo Fort,Bolawatta,48.88,500.0,250.0,120.0
+Colombo Fort,Eluthumattuwal,365.11,2150.0,1100.0,540.0
+Colombo Fort,Peradeniya Jnc,114.85,950.0,500.0,240.0
+Colombo Fort,Boralessa,51.38,500.0,250.0,140.0
+Colombo Fort,Mirusuwil,369.78,2150.0,1100.0,540.0
+Colombo Fort,Koshinna,117.36,950.0,500.0,240.0
+Colombo Fort,Lunuwila,54.35,550.0,300.0,140.0
+Colombo Fort,Kodikamam,372.68,2150.0,1100.0,540.0
+Colombo Fort,Gelioya,119.54,950.0,500.0,240.0
+Colombo Fort,Thummodara,59.32,600.0,300.0,140.0
+Colombo Fort,Mesalai,376.02,2200.0,1100.0,560.0
+Colombo Fort,Gampola,126.93,1000.0,500.0,260.0
+Colombo Fort,Naththandiya,62.2,600.0,300.0,160.0
+Colombo Fort,Sankathanai,378.16,2200.0,1100.0,560.0
+Colombo Fort,Thembiligala,130.87,1050.0,550.0,260.0
+Colombo Fort,Walahapitiya,65.16,600.0,300.0,160.0
+Colombo Fort,Chawakachcheri,379.99,2200.0,1100.0,560.0
+Colombo Fort,Ulapane,134.31,1050.0,550.0,260.0
+Colombo Fort,Kudawewa,67.78,650.0,350.0,160.0
+Colombo Fort,Thachchanthoppu,385.55,2250.0,1150.0,560.0
+Colombo Fort,Navalapitiya,141.52,1100.0,550.0,280.0
+Colombo Fort,Nelumpokuna,70.69,650.0,350.0,160.0
+Colombo Fort,Navatkuli,388.64,2250.0,1150.0,560.0
+Colombo Fort,Inguruoya,147.31,1100.0,550.0,280.0
+Colombo Fort,Madampe,72.0,650.0,350.0,160.0
+Colombo Fort,Pungankulam,393.66,2250.0,1150.0,580.0
+Colombo Fort,Galboda,152.86,1150.0,600.0,300.0
+Colombo Fort,Kakkapalliya,76.42,700.0,350.0,180.0
+Colombo Fort,Jaffna,395.83,2250.0,1150.0,580.0
+Colombo Fort,Watawala,162.1,1200.0,600.0,300.0
+Colombo Fort,Sawarana,79.66,700.0,350.0,180.0
+Colombo Fort,Kokavil,398.64,2300.0,1150.0,580.0
+Colombo Fort,Ihala Watawala,165.31,1200.0,600.0,300.0
+Colombo Fort,Chilaw,82.46,750.0,400.0,180.0
+Colombo Fort,Kondavil,400.4,2300.0,1150.0,580.0
+Colombo Fort,Rozella,167.79,1250.0,650.0,320.0
+Colombo Fort,Manuwangama,88.83,800.0,400.0,200.0
+Colombo Fort,Inuvil,402.92,2300.0,1150.0,580.0
+Colombo Fort,Hatton,174.91,1250.0,650.0,320.0
+Colombo Fort,Bangadeniya,91.69,800.0,400.0,200.0
+Colombo Fort,Chunnakam,405.24,2300.0,1150.0,580.0
+Colombo Fort,Kotagala,179.97,1300.0,650.0,320.0
+Colombo Fort,Arachchikattuwa,96.15,850.0,450.0,220.0
+Colombo Fort,Mallakam,406.99,2300.0,1150.0,580.0
+Colombo Fort,Thalawakele,187.86,1350.0,700.0,340.0
+Colombo Fort,Anawilundawa,99.69,850.0,450.0,220.0
+Colombo Fort,Thellipalai,409.46,2350.0,1200.0,580.0
+Colombo Fort,Watagoda,194.3,1400.0,700.0,340.0
+Colombo Fort,Baththuluoya,101.93,850.0,450.0,220.0
+Colombo Fort,Mavittapuram,411.13,2350.0,1200.0,580.0
+Colombo Fort,Great Western,199.31,1400.0,700.0,360.0
+Colombo Fort,Pulichchakulama,106.2,900.0,450.0,220.0
+Colombo Fort,Kankasnthurai,413.29,2350.0,1200.0,600.0
+Colombo Fort,Radella,202.71,1400.0,700.0,360.0
+Colombo Fort,Mundalama,109.77,900.0,450.0,240.0
+Colombo Fort,Nanuoya,207.06,1450.0,750.0,360.0
+Colombo Fort,Mangalaeliya,116.73,950.0,500.0,240.0
+Colombo Fort,Neriyakulam,243.7,1600.0,800.0,400.0
+Colombo Fort,Perakumpura,212.21,1450.0,750.0,380.0
+Colombo Fort,Madurankuliya,121.67,950.0,500.0,240.0
+Colombo Fort,Weddikulam,252.24,1650.0,850.0,420.0
+Colombo Fort,Ambewela,221.5,1500.0,750.0,380.0
+Colombo Fort,Irukkulampiddi Nagawillu,128.9,1000.0,500.0,260.0
+Colombo Fort,Madu Road,273.91,1750.0,900.0,440.0
+Colombo Fort,Pattipola,224.93,1500.0,750.0,380.0
+Colombo Fort,Palavi,130.47,1000.0,500.0,260.0
+Colombo Fort,Murukkan,286.74,1800.0,900.0,460.0
+Colombo Fort,Ohiya,231.64,1550.0,800.0,400.0
+Colombo Fort,Thilladiya,132.26,1050.0,550.0,260.0
+Colombo Fort,Mathottam,295.08,1850.0,950.0,460.0
+Colombo Fort,Thirukethiswaram,300.43,1850.0,950.0,460.0
+Colombo Fort,Train Holt 1,36.06,400.0,200.0,100.0
+Colombo Fort,Udahamulla,13.42,150.0,100.0,40.0
+Colombo Fort,Mannar,309.98,1900.0,950.0,480.0
+Colombo Fort,Katutara North,39.88,400.0,200.0,100.0
+Colombo Fort,Navinna,15.19,200.0,100.0,40.0
+Colombo Fort,Thoddaveli,316.84,1950.0,1000.0,480.0
+Colombo Fort,Katutara South,41.87,450.0,250.0,120.0
+Colombo Fort,Maharagama,16.36,200.0,100.0,60.0
+Colombo Fort,Pesalai,324.91,1950.0,1000.0,500.0
+Colombo Fort,Katukurunda,44.68,450.0,250.0,120.0
+Colombo Fort,Pannipitiya,19.01,200.0,100.0,60.0
+Colombo Fort,Thalaimannar,334.75,2000.0,1000.0,500.0
+Colombo Fort,Payagala North,48.05,500.0,250.0,120.0
+Colombo Fort,Kottawa,21.31,250.0,150.0,60.0
+Colombo Fort,Talaimannar Pier,336.97,2000.0,1000.0,500.0
+Colombo Fort,Payagala South,49.26,500.0,250.0,140.0
+Colombo Fort,Makumbura,22.5,250.0,150.0,60.0
+Colombo Fort,Maggona,51.16,500.0,250.0,140.0
+Colombo Fort,Hospital-Homagama,24.3,250.0,150.0,80.0
+Colombo Fort,Konwewa,149.06,1150.0,600.0,280.0
+Colombo Fort,Beruwala,54.33,550.0,300.0,140.0
+Colombo Fort,Homagama,26.51,300.0,150.0,80.0
+Colombo Fort,Ranamukgama,155.96,1150.0,600.0,300.0
+Colombo Fort,Hettimulla,56.52,550.0,300.0,140.0
+Colombo Fort,Panagoda,28.29,300.0,150.0,80.0
+Colombo Fort,Moragollagama,159.94,1200.0,600.0,300.0
+Colombo Fort,Aluthgama,59.67,600.0,300.0,140.0
+Colombo Fort,Godagama,30.12,300.0,150.0,80.0
+Colombo Fort,300.00 Bentota,60.97,600.0,300.0,160.0
+Colombo Fort,Megoda,31.64,350.0,200.0,80.0
+Colombo Fort,Negama,171.81,1250.0,650.0,320.0
+Colombo Fort,Induruwa,64.95,600.0,300.0,160.0
+Colombo Fort,Watareka,33.16,350.0,200.0,100.0
+Colombo Fort,Awkana,176.08,1300.0,650.0,320.0
+Colombo Fort,Maha Induruwa,67.64,650.0,350.0,160.0
+Colombo Fort,Padukka,37.18,400.0,200.0,100.0
+Colombo Fort,Kalawewa,179.28,1300.0,650.0,320.0
+Colombo Fort,Kosgoda,71.08,650.0,350.0,160.0
+Colombo Fort,Arukwatta,38.74,400.0,200.0,100.0
+Colombo Fort,Kekirawa,188.45,1350.0,700.0,340.0
+Colombo Fort,Piyagama,72.52,650.0,350.0,180.0
+Colombo Fort,Angampitiya,40.04,400.0,200.0,100.0
+Colombo Fort,Horiwila,199.27,1400.0,700.0,360.0
+Colombo Fort,Ahungalla,73.99,700.0,350.0,180.0
+Colombo Fort,Uggalla,40.76,400.0,200.0,100.0
+Colombo Fort,Palugaswewa,203.2,1450.0,750.0,360.0
+Colombo Fort,Pathegamgoda,76.11,700.0,350.0,180.0
+Colombo Fort,Pinnawala,42.05,450.0,250.0,120.0
+Colombo Fort,Habarana,210.24,1450.0,750.0,360.0
+Colombo Fort,Balapitiya,78.21,700.0,350.0,180.0
+Colombo Fort,Gammana,43.1,450.0,250.0,120.0
+Colombo Fort,Hathares Kotuwa,223.3,1500.0,750.0,380.0
+Colombo Fort,Andadola,79.74,700.0,350.0,180.0
+Colombo Fort,Morakele,43.9,450.0,250.0,120.0
+Colombo Fort,Galoya Jnc,226.68,1550.0,800.0,380.0
+Colombo Fort,Kandegoda,81.46,750.0,400.0,180.0
+Colombo Fort,Waga,46.3,500.0,250.0,120.0
+Colombo Fort,Minneriya,236.14,1550.0,800.0,400.0
+Colombo Fort,Ambalangoda,83.14,750.0,400.0,180.0
+Colombo Fort,Kadugoda,48.67,500.0,250.0,120.0
+Colombo Fort,Hingurakgoda,243.76,1600.0,800.0,400.0
+Colombo Fort,Madampagama,85.87,750.0,400.0,200.0
+Colombo Fort,Kosgama,51.34,500.0,250.0,140.0
+Colombo Fort,Jayanthipura,249.07,1650.0,850.0,420.0
+Colombo Fort,Akurala,87.83,750.0,400.0,200.0
+Colombo Fort,Puwakpitiya,57.47,550.0,300.0,140.0
+Colombo Fort,Laksha Uyana,252.15,1650.0,850.0,420.0
+Colombo Fort,Kahawe,89.3,800.0,400.0,200.0
+Colombo Fort,Avissawella,61.18,600.0,300.0,160.0
+Colombo Fort,Perakum Uyana,254.47,1650.0,850.0,420.0
+Colombo Fort,Thelwatta,91.98,800.0,400.0,200.0
+Colombo Fort,Polonnaruwa,259.7,1700.0,850.0,420.0
+Colombo Fort,Sinigama,92.73,800.0,400.0,200.0
+Colombo Fort,Gallella,264.12,1700.0,850.0,420.0
+Colombo Fort,Hikkaduwa,95.14,800.0,400.0,200.0
+Colombo Fort,Manampitiya,269.58,1700.0,850.0,440.0
+Colombo Fort,Thiranagama,97.89,850.0,450.0,220.0
+Colombo Fort,Sewanapitiya,278.9,1750.0,900.0,440.0
+Colombo Fort,Kumarakanda,99.6,850.0,450.0,220.0
+Colombo Fort,Welikanda,286.01,1800.0,900.0,460.0
+Colombo Fort,Dodanduwa,101.53,850.0,450.0,220.0
+Colombo Fort,Ridithenna,297.05,1850.0,950.0,460.0
+Colombo Fort,Rathgama,102.56,850.0,450.0,220.0
+Colombo Fort,Punani,301.51,1850.0,950.0,460.0
+Colombo Fort,Bussa,105.74,900.0,450.0,220.0
+Colombo Fort,Kadadasi Nagar,315.77,1900.0,950.0,480.0
+Colombo Fort,Gintota,108.31,900.0,450.0,220.0
+Colombo Fort,Walachchena,319.13,1950.0,1000.0,480.0
+Colombo Fort,Piyadigama,109.98,900.0,450.0,240.0
+Colombo Fort,Kalkuda,322.04,1950.0,1000.0,500.0
+Colombo Fort,Richmond Hill,111.42,900.0,450.0,240.0
+Colombo Fort,Dewapuram,330.1,2000.0,1000.0,500.0
+Colombo Fort,Galle,113.89,950.0,500.0,240.0
+Colombo Fort,Vandaramulle,335.17,2000.0,1000.0,500.0
+Colombo Fort,Katugoda,118.28,950.0,500.0,240.0
+Colombo Fort,Eravur,337.15,2000.0,1000.0,500.0
+Colombo Fort,Unawatuna,119.53,950.0,500.0,240.0
+Colombo Fort,Baticaloa,349.69,2050.0,1050.0,520.0
+Colombo Fort,Talpe,124.35,1000.0,500.0,260.0
+Colombo Fort,Habaraduwa,127.39,1000.0,500.0,260.0
+Colombo Fort,Aluthoya,245.31,1600.0,800.0,400.0
+Colombo Fort,Koggala,129.11,1000.0,500.0,260.0
+Colombo Fort,Agbopura,251.96,1650.0,850.0,420.0
+Colombo Fort,Kathaluwa,131.29,1050.0,550.0,260.0
+Colombo Fort,Kantale,256.38,1650.0,850.0,420.0
+Colombo Fort,Ahangama,134.17,1050.0,550.0,260.0
+Colombo Fort,Mollipothana,268.49,1700.0,850.0,440.0
+Colombo Fort,Medigama,137.67,1050.0,550.0,260.0
+Colombo Fort,440.00 Kumbalgama,139.2,1050.0,550.0,280.0
+Colombo Fort,China Bay,290.31,1800.0,900.0,460.0
+Colombo Fort,Weligama,142.83,1100.0,550.0,280.0
+Colombo Fort,Tricomalee,296.91,1850.0,950.0,460.0
+Colombo Fort,Polwathumodara,146.26,1100.0,550.0,280.0
+Colombo Fort,Mirissa,147.56,1100.0,550.0,280.0
+Colombo Fort,Secretarial,0.67,100.0,50.0,20.0
+Colombo Fort,Kamburugamuwa,151.36,1150.0,600.0,280.0
+Colombo Fort,Kompannavidiya,1.73,100.0,50.0,20.0
+Colombo Fort,Walgama,154.1,1150.0,600.0,300.0
+Colombo Fort,Kollupitiya,3.12,100.0,50.0,20.0
+Colombo Fort,Matara,156.82,1150.0,600.0,300.0
+Colombo Fort,Bambalapitiya,5.13,100.0,50.0,20.0
+Colombo Fort,Piliduwa,158.39,1200.0,600.0,300.0
+Colombo Fort,Wellawatta,7.25,100.0,50.0,20.0
+Colombo Fort,Weherahena,160.77,1200.0,600.0,300.0
+Colombo Fort,Dehiwala,9.97,150.0,100.0,40.0
+Colombo Fort,Kekanadura,163.17,1200.0,600.0,300.0
+Colombo Fort,Mount Lavinia,12.22,150.0,100.0,40.0
+Colombo Fort,Bmbarenda,170.06,1250.0,650.0,320.0
+Colombo Fort,Ratmalana,14.02,150.0,100.0,40.0
+Colombo Fort,Wewurukannala,174.27,1250.0,650.0,320.0
+Colombo Fort,Angulana,15.95,200.0,100.0,60.0
+Colombo Fort,Beliatta,183.23,1300.0,650.0,340.0
+Colombo Fort,Lunawa,17.37,200.0,100.0,60.0
+Colombo Fort,Moratuwa,18.96,200.0,100.0,60.0
+Colombo Fort,Baselin Road,3.78,100.0,50.0,20.0
+Colombo Fort,Koralawella,20.74,250.0,150.0,60.0
+Colombo Fort,Cotta Road,5.45,100.0,50.0,20.0
+Colombo Fort,Egoda Uyana,22.57,250.0,150.0,60.0
+Colombo Fort,Narahenpita,7.52,100.0,50.0,20.0
+Colombo Fort,Panadura,26.26,300.0,150.0,80.0
+Colombo Fort,Kirulapana,9.26,100.0,50.0,40.0
+Colombo Fort,Pinwatta,29.48,300.0,150.0,80.0
+Colombo Fort,Nugegoda,11.05,150.0,100.0,40.0
+Colombo Fort,Wadduwa,32.47,350.0,200.0,80.0
+Colombo Fort,Pengiriwatta,12.6,150.0,100.0,40.0
