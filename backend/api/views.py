@@ -12,6 +12,8 @@ from rest_framework import generics
 from django.conf import settings
 from django.db.models import Sum, Count
 import json
+from .helper import process_task_id_3
+from .mqtt_client import start_mqtt_client
 from django.utils.timezone import now
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
 from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
@@ -22,6 +24,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+mqtt_client = start_mqtt_client()
 
 # Setup Neo4j driver
 driver = GraphDatabase.driver(
@@ -158,78 +161,19 @@ class PublishMessageView(APIView):
         
 
 class GetcarddetailsView(APIView):
-    permission_classes = [AllowAny]
     def post(self, request):
-        print(request.data)
-        task_ID  = request.data.get('task_id')
+        task_ID = request.data.get('task_id')
 
+        if task_ID == 3:
+            result = process_task_id_3(request.data)
+            if "error" in result:
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+            return Response(result, status=status.HTTP_200_OK)
 
-        if task_ID == 1:
-            card_num = request.data.get('uid')
-            try:
-                card = Card.objects.get(card_num=card_num)
-                response_data = {
-                    "nic": card.nic_number.nic_number,
-                    "amount": card.balance
-                }
-                return Response(response_data, status=status.HTTP_200_OK)
-            except Card.DoesNotExist:
-                return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
-            
+        return Response({"error": "Invalid task_id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        elif task_ID == 2:
-            nic = request.data.get('nic')
-            if not nic:
-                return Response({"error": "Card is invalid_0"}, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                passenger = Passenger.objects.get(nic_number=nic)
-                card = Card.objects.get(nic_number=passenger)
-                return Response({"message": "Card is valid",}, status=status.HTTP_200_OK)
-            except Passenger.DoesNotExist:
-                return Response({"error": "Card is invalid_1"}, status=status.HTTP_404_NOT_FOUND)
-            except Card.DoesNotExist:
-                return Response({"error": "Card is invalid_2"}, status=status.HTTP_404_NOT_FOUND)
-        
-
-        elif task_ID == 3:
-            nic = request.data.get('nic')
-            start = request.data.get('station_id')
-            end = request.data.get('this_station')
-            amount = request.data.get('amount')
-            try:
-                min_station = min(int(start), int(end))
-                max_station = max(int(start), int(end))
-                route = str(min_station) + "-" + str(max_station)
-                try:
-                    price = TransportFees.objects.get(route=route).amount
-                    new_amount = int(amount - price)
-                    passenger = Passenger.objects.get(nic_number=nic)
-                    card = Card.objects.get(nic_number=passenger)
-                    card.balance = new_amount
-                    card.save()
-                except TransportFees.DoesNotExist:
-                    return Response({"error": "Route not found"}, status=status.HTTP_404_NOT_FOUND)
-                passenger = Passenger.objects.get(nic_number=nic)
-                card = Card.objects.get(nic_number=passenger)
-                transaction = Transaction.objects.create(
-                    card_num=card,
-                    S_station=start,
-                    E_station=end,
-                    amount=price
-                )
-                transaction.save()
-                return Response({"new_amount": new_amount}, status=status.HTTP_200_OK)
-            except Passenger.DoesNotExist:
-                return Response({"error": "Passenger with this NIC does not exist"}, status=status.HTTP_404_NOT_FOUND)
-            except Card.DoesNotExist:
-                return Response({"error": "No card found for this NIC"}, status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-    
     def get(self, request):
-        return Response({"error" : "pa####d get ewanne post ewapan"}, status=status.HTTP_201_CREATED)
+        return Response({"error": "send post"}, status=status.HTTP_201_CREATED)
         
         
 class PassengerAndCardDetailsView(APIView):
@@ -277,55 +221,28 @@ class CreateCardView(generics.CreateAPIView):
     serializer_class = CardSerializer
     permission_classes = [AllowAny]
 
-    def publish_to_mqtt(self, topic, payload):
-        client = mqtt.Client(client_id=settings.MQTT_CLIENT_ID)
-        client.tls_set(
-            ca_certs=settings.MQTT_CA_PATH,
-            certfile=settings.MQTT_CERT_PATH,
-            keyfile=settings.MQTT_KEY_PATH,
-            tls_version=ssl.PROTOCOL_TLSv1_2,
-        )
-        client.connect(settings.MQTT_BROKER_URL, settings.MQTT_BROKER_PORT)
-        client.loop_start()
-        result = client.publish(topic, json.dumps(payload))
-        client.loop_stop()
-        client.disconnect()
-        return result
-
     def create(self, request, *args, **kwargs):
-        station_id = request.data.get("issued_station")
-        #station_num = get_object_or_404(Station, id=station_id).station_ID
-        #topic = settings.STATION_MQTT_TOPICS.get(str(station_id))
-        topic = "esp32/rfid_sub"
-        print(topic)
-
-        if not topic:
-            return Response({"error": "Invalid or missing station_id"}, status=status.HTTP_400_BAD_REQUEST)
-
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             card = serializer.save()
+            station_id = card.issued_station.station_ID
+            topic = f"esp32/stationsub/{station_id}"
+            print("topic: ",topic)
+            
+            if topic:
+                payload = {
+                        "task_id": 1,
+                        "nic": card.nic_number.nic_number,
+                        "amount": card.balance,
+                    }
+                print(f"Publishing to topic: {topic}")
+                print(f"Payload: {json.dumps(payload)}")
+                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                print(f"Publish result: {result.rc}")  # 0 means success
+            else:
+                print(f"No topic found for station ID: {station_id}")
+            return Response({"message": "Card created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
 
-            payload = {
-                "card_number": card.card_num,
-                "amount": card.balance,
-                "nic_number": getattr(card.nic_number, "nic_number", None)
-            }
-            print(payload)
-
-            try:
-                self.publish_to_mqtt(topic, payload)
-            except Exception as e:
-                return Response({
-                    "message": "Card created, but MQTT publish failed",
-                    "error": str(e),
-                    "data": serializer.data
-                }, status=status.HTTP_201_CREATED)
-
-            return Response({
-                "message": "Card created successfully",
-                "data": serializer.data
-            }, status=status.HTTP_201_CREATED)
         # If validation fails, return the error details
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -351,6 +268,21 @@ class RechargeCardView(APIView):
                 amount=new_balance,
                 station=station
             )
+            topic = f"esp32/stationsub/{station_id}"
+            print("topic: ",topic)
+            
+            if topic:
+                payload = {
+                        "task_id": 1,
+                        "nic": card.nic_number.nic_number,
+                        "amount": card.balance,
+                    }
+                print(f"Publishing to topic: {topic}")
+                print(f"Payload: {json.dumps(payload)}")
+                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                print(f"Publish result: {result.rc}")  # 0 means success
+            else:
+                print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Balance updated successfully", "balance": card.balance}, status=status.HTTP_200_OK)
         except Card.DoesNotExist:
             return Response({"error": "Card not found"}, status=status.HTTP_404_NOT_FOUND)
