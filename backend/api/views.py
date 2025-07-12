@@ -526,13 +526,14 @@ class TrainRouteDetailsView(APIView):
             return Response({"error": "No stations found for this route"}, status=status.HTTP_404_NOT_FOUND)
         
         location_data = latest_locations[train_name]
-        location = location_data["latitude"] + ", " + location_data["longitude"]
+        location = str(location_data["latitude"]) + ", " + str(location_data["longitude"])
 
         first_station = station_data[0]
         matched_station = None
         for station in station_data:
             if int(station["station_id"]) == int(train.last_station):
                 matched_station = station
+                print(matched_station)
                 break
         response_data = {
             "route_id": route_id,
