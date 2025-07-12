@@ -6,6 +6,7 @@ import uuid
 import ssl
 import json
 from .helper import process_task_id_3
+from .location_cache import latest_locations
 
 published = False
 mqtt_client = None
@@ -23,10 +24,20 @@ def on_message(client, userdata, msg):
     print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
     try:
         payload = json.loads(msg.payload.decode())
-        task_ID = payload.get("task_id")
+        task_ID = payload.get("task_ID")
 
         if task_ID == 4:
-            print("gps info received", payload)
+            train_name = payload.get("train_name")
+            lat = payload.get("latitude")
+            lon = payload.get("longitude")
+            speed = payload.get("speed")
+
+            latest_locations[train_name] = {
+                "latitude" : lat,
+                "longitude" : lon,
+                "speed" : speed,
+            }
+            print("data saved to cache!")
 
         #card recharge task
         elif task_ID == 3:

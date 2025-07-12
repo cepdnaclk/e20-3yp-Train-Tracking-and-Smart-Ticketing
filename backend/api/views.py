@@ -15,6 +15,7 @@ import json
 from .helper import process_task_id_3
 from .mqtt_client import start_mqtt_client
 from django.utils.timezone import now
+from .location_cache import latest_locations
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
 from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
 import paho.mqtt.client as mqtt
@@ -522,6 +523,9 @@ class TrainRouteDetailsView(APIView):
 
         if not station_data:
             return Response({"error": "No stations found for this route"}, status=status.HTTP_404_NOT_FOUND)
+        
+        location_data = latest_locations[train_name]
+        location = location_data["latitude"] + ", " + location_data["longitude"]
 
         first_station = station_data[0]
         matched_station = None
@@ -531,10 +535,11 @@ class TrainRouteDetailsView(APIView):
                 break
         response_data = {
             "route_id": route_id,
-            "train_location": train.location,
+            "train_location": location,
             "stations": station_data,
             "starting_station": first_station,
             "last_station": matched_station,
+            "speed" : location_data["speed"]
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
@@ -543,14 +548,14 @@ class TrainRouteDetailsView(APIView):
 class TrainLocationListView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
-        trains = Trains.objects.all()
-        data = [
-            {
-                "train_name": train.train_name,
-                "location": train.location
-            }
-            for train in trains
-        ]
+        data = []
+        for train_name, location in latest_locations.items():
+            print(train_name, location)
+            data.append({
+                "train_name": train_name,
+                "location": f"{location['latitude']}, {location['longitude']}",
+                "speed": location["speed"]
+            })
         return Response(data, status=status.HTTP_200_OK)
     
 
@@ -568,16 +573,22 @@ class ReceiveGPSView(APIView):
     
 class ReceiveLocationView(APIView):
     permission_classes = [AllowAny]
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            name = data.get('name')
-            lat = data.get('lat')
-            lon = data.get('lon')
 
-            print(f"[Location Received] Name: {name}, Latitude: {lat}, Longitude: {lon}")
+    def post(self, request):
+        train_name = request.data.get("train_name")
+        speed = request.data.get("speed")
+        latitude = request.data.get("latitude")   # changed here
+        longitude = request.data.get("longitude")
 
-            return JsonResponse({"status": "success", "message": "Location received."}, status=200)
-        except Exception as e:
-            print(f"[Error] {e}")
-            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+        latest_locations[train_name] = {
+            "latitude" : latitude,
+            "longitude" : longitude,
+            "speed" : speed,
+        }
+        print("data saved to cache!")
+            
+        if train_name and speed and latitude and longitude:
+            print(f"Received GPS: train={train_name}, speed={speed} km/h, lat={latitude}, lon={longitude}")
+            return Response({"message": "GPS received"}, status=status.HTTP_200_OK)
+            
+        return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
