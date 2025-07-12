@@ -235,6 +235,7 @@ class CreateCardView(generics.CreateAPIView):
                         "task_id": 1,
                         "nic": card.nic_number.nic_number,
                         "amount": card.balance,
+                        "card_id" : card.card_num,
                     }
                 print(f"Publishing to topic: {topic}")
                 print(f"Payload: {json.dumps(payload)}")
