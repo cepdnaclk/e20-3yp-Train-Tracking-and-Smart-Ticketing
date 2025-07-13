@@ -13,7 +13,7 @@ from django.conf import settings
 from django.db.models import Sum, Count
 import json
 from .helper import process_task_id_3
-from .mqtt_client import start_mqtt_client
+#from .mqtt_client import start_mqtt_client
 from django.utils.timezone import now
 from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
@@ -25,7 +25,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-mqtt_client = start_mqtt_client()
+#mqtt_client = start_mqtt_client()
 
 # Setup Neo4j driver
 driver = GraphDatabase.driver(
