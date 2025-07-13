@@ -27,6 +27,7 @@ def on_message(client, userdata, msg):
         task_ID = payload.get("task_ID")
 
         if task_ID == 4:
+            print("---------------------------------------------------------------------------")
             train_name = payload.get("train_name")
             lat = payload.get("latitude")
             lon = payload.get("longitude")
