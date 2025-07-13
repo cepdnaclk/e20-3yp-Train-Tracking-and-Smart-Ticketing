@@ -1,4 +1,3 @@
-# mqtt_client.py
 import paho.mqtt.client as mqtt
 from django.conf import settings
 import threading
@@ -21,9 +20,15 @@ def on_connect(client, userdata, flags, rc):
         print(f"Failed to connect, return code {rc}")
 
 def on_message(client, userdata, msg):
-    print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
     try:
-        payload = json.loads(msg.payload.decode())
+        payload_str = msg.payload.decode()
+        print(f"Received message: {payload_str} on topic {msg.topic}")
+        payload = json.loads(payload_str)
+    except (UnicodeDecodeError, json.JSONDecodeError) as e:
+        print(f"[MQTT Error] Invalid payload: {e}")
+        return
+
+    try:
         task_ID = payload.get("task_ID")
 
         if task_ID == 4:
@@ -34,18 +39,18 @@ def on_message(client, userdata, msg):
             speed = payload.get("speed")
 
             data = {
-                "latitude" : lat,
-                "longitude" : lon,
-                "speed" : speed,
+                "latitude": lat,
+                "longitude": lon,
+                "speed": speed,
             }
 
             set_latest_location(train_name, data)
-            print("data saved to cache!")
+            print("Data saved to cache!")
 
-        #card recharge task
         elif task_ID == 3:
             result = process_task_id_3(payload)
             print("[MQTT Response]", result)
+
     except Exception as e:
         print("[MQTT Error]", str(e))
 
