@@ -6,7 +6,7 @@ import uuid
 import ssl
 import json
 from .helper import process_task_id_3
-from .location_cache import latest_locations
+from .location_cache import set_latest_location
 
 published = False
 mqtt_client = None
@@ -32,11 +32,13 @@ def on_message(client, userdata, msg):
             lon = payload.get("longitude")
             speed = payload.get("speed")
 
-            latest_locations[train_name] = {
+            data = {
                 "latitude" : lat,
                 "longitude" : lon,
                 "speed" : speed,
             }
+
+            set_latest_location(train_name, data)
             print("data saved to cache!")
 
         #card recharge task

@@ -15,7 +15,7 @@ import json
 from .helper import process_task_id_3
 from .mqtt_client import start_mqtt_client
 from django.utils.timezone import now
-from .location_cache import latest_locations
+from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
 from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
 import paho.mqtt.client as mqtt
@@ -525,7 +525,7 @@ class TrainRouteDetailsView(APIView):
         if not station_data:
             return Response({"error": "No stations found for this route"}, status=status.HTTP_404_NOT_FOUND)
         
-        location_data = latest_locations[train_name]
+        location_data = get_latest_location(train_name)
         location = str(location_data["latitude"]) + ", " + str(location_data["longitude"])
 
         first_station = station_data[0]
@@ -551,12 +551,13 @@ class TrainLocationListView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
         data = []
-        for train_name, location in latest_locations.items():
+        locations = get_all_latest_locations()
+        for train_name, location in locations.items():
             print(train_name, location)
             data.append({
                 "train_name": train_name,
                 "location": f"{location['latitude']}, {location['longitude']}",
-                "speed": location["speed"]
+                "speed": location['speed'],
             })
         return Response(data, status=status.HTTP_200_OK)
     
@@ -582,11 +583,13 @@ class ReceiveLocationView(APIView):
         latitude = request.data.get("latitude")   # changed here
         longitude = request.data.get("longitude")
 
-        latest_locations[train_name] = {
+        data = {
             "latitude" : latitude,
             "longitude" : longitude,
             "speed" : speed,
         }
+
+        set_latest_location(train_name, data)
         print("data saved to cache!")
             
         if train_name and speed and latitude and longitude:

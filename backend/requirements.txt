@@ -19,4 +19,5 @@ tzdata==2025.2
 pymysql
 gunicorn
 cryptography
+redis
 
