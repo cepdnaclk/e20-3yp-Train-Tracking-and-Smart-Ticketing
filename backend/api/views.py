@@ -13,7 +13,7 @@ from django.conf import settings
 from django.db.models import Sum, Count
 import json
 from .helper import process_task_id_3
-#from .mqtt_client import start_mqtt_client
+from .mqtt_client import publish_message
 from django.utils.timezone import now
 from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
@@ -147,21 +147,21 @@ class CreateStationView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class PublishMessageView(APIView):
+"""class PublishMessageView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         topic = settings.MQTT_TOPIC_PUB  # Use the topic from settings
         #message = request.data.get("message")
-        res = {"message": "pakaya"}
+        res = {"message": "response"}
         try:
             mqtt_client.publish(topic, json.dumps(res))  # Convert to JSON string
             return JsonResponse({"status": "Message published", "message": res}, status=200)
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+            return JsonResponse({"error": str(e)}, status=500)"""
         
 
-class GetcarddetailsView(APIView):
+"""class GetcarddetailsView(APIView):
     def post(self, request):
         task_ID = request.data.get('task_id')
 
@@ -174,7 +174,7 @@ class GetcarddetailsView(APIView):
         return Response({"error": "Invalid task_id"}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        return Response({"error": "send post"}, status=status.HTTP_201_CREATED)
+        return Response({"error": "send post"}, status=status.HTTP_201_CREATED)"""
         
         
 class PassengerAndCardDetailsView(APIView):
@@ -237,10 +237,11 @@ class CreateCardView(generics.CreateAPIView):
                         "amount": card.balance,
                         "card_id" : card.card_num,
                     }
-                print(f"Publishing to topic: {topic}")
-                print(f"Payload: {json.dumps(payload)}")
-                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
-                print(f"Publish result: {result.rc}")  # 0 means success
+                #print(f"Publishing to topic: {topic}")
+                #print(f"Payload: {json.dumps(payload)}")
+                #result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                #print(f"Publish result: {result.rc}")  # 0 means success
+                publish_message(payload, topic)
             else:
                 print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Card created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
@@ -280,10 +281,11 @@ class RechargeCardView(APIView):
                         "amount": card.balance,
                         "card_id" : card.card_num,
                     }
-                print(f"Publishing to topic: {topic}")
-                print(f"Payload: {json.dumps(payload)}")
-                result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
-                print(f"Publish result: {result.rc}")  # 0 means success
+                #print(f"Publishing to topic: {topic}")
+                #print(f"Payload: {json.dumps(payload)}")
+                #result = mqtt_client.publish(topic, json.dumps(payload),qos=1)
+                #print(f"Publish result: {result.rc}")  # 0 means success
+                publish_message(payload, topic)
             else:
                 print(f"No topic found for station ID: {station_id}")
             return Response({"message": "Balance updated successfully", "balance": card.balance}, status=status.HTTP_200_OK)
@@ -597,3 +599,40 @@ class ReceiveLocationView(APIView):
             return Response({"message": "GPS received"}, status=status.HTTP_200_OK)
             
         return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class MqttDataView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        data = request.data
+        print("Received MQTT data:", data)
+        try:
+            task_ID = data.get("task_ID")
+
+            if task_ID == 4:
+                print("---------------------------------------------------------------------------")
+                train_name = data.get("train_name")
+                lat = data.get("latitude")
+                lon = data.get("longitude")
+                speed = data.get("speed")
+
+                new_data = {
+                    "latitude": lat,
+                    "longitude": lon,
+                    "speed": speed,
+                }
+
+                set_latest_location(train_name, new_data)
+                print("Data saved to cache!")
+
+            elif task_ID == 3:
+                result = process_task_id_3(new_data)
+                print("[MQTT Response]", result)
+
+        except Exception as e:
+            print("[MQTT Error]", str(e))
+
+        # Save to DB or cache
+        # For example: set_latest_location(train_name, data)
+
+        return Response({"message": "Data received"}, status=status.HTTP_200_OK)

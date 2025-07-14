@@ -7,9 +7,25 @@ import json
 from .helper import process_task_id_3
 from .location_cache import set_latest_location
 
-published = False
+
 mqtt_client = None
 client_lock = threading.Lock()
+
+import requests
+
+def send_to_backend(data):
+    try:
+        #url = 'https://raillynk.site/api/mqtt-data/'
+        url = 'http://127.0.0.1:8000/api/mqtt-data/' # for local testing, use 'http://localhost:8000/api/mqtt-data/'
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, json=data, timeout=5)
+        if response.status_code == 200:
+            print("✅ Successfully sent data to backend")
+        else:
+            print(f"❌ Failed to send data: {response.status_code} {response.text}")
+    except Exception as e:
+        print(f"[HTTP POST Error] {e}")
+
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -22,40 +38,18 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     try:
         payload_str = msg.payload.decode()
-        print(f"Received message: {payload_str} on topic {msg.topic}")
+        print(f"📥 Message: {payload_str} on topic {msg.topic}")
         payload = json.loads(payload_str)
     except (UnicodeDecodeError, json.JSONDecodeError) as e:
         print(f"[MQTT Error] Invalid payload: {e}")
         return
 
-    try:
-        task_ID = payload.get("task_ID")
-
-        if task_ID == 4:
-            print("---------------------------------------------------------------------------")
-            train_name = payload.get("train_name")
-            lat = payload.get("latitude")
-            lon = payload.get("longitude")
-            speed = payload.get("speed")
-
-            data = {
-                "latitude": lat,
-                "longitude": lon,
-                "speed": speed,
-            }
-
-            set_latest_location(train_name, data)
-            print("Data saved to cache!")
-
-        elif task_ID == 3:
-            result = process_task_id_3(payload)
-            print("[MQTT Response]", result)
-
-    except Exception as e:
-        print("[MQTT Error]", str(e))
+    # Immediately send the full payload to backend via HTTP POST
+    send_to_backend(payload)
 
 def on_disconnect(client, userdata, rc):
     print(f"Disconnected from AWS IoT Core with result code: {rc}")
+    start_mqtt_client()  # Attempt to reconnect
 
 def start_mqtt_client():
     global mqtt_client
@@ -74,5 +68,9 @@ def start_mqtt_client():
             )
 
             mqtt_client.connect(settings.MQTT_BROKER_URL, settings.MQTT_BROKER_PORT)
-            mqtt_client.loop_start()
-    return mqtt_client
+    mqtt_client.loop_forever()
+
+def publish_message(data,topic):
+    payload = json.dumps(data)
+    mqtt_client.publish(topic, payload)
+    print(f"📤 Published to {topic}: {payload}")

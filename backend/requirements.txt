@@ -20,4 +20,4 @@ pymysql
 gunicorn
 cryptography
 redis
-
+requests
