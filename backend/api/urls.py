@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView
+from .views import RouteStateView, ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView
 
 urlpatterns = [
     path('passengers/new/', CreatePassengerView.as_view()),
@@ -27,4 +27,5 @@ urlpatterns = [
     path("get/gps/location/", ReceiveGPSView.as_view(), name="get_gps_locations"),
     path("loc/", ReceiveLocationView.as_view(), name="location"),
     path("mqtt-data/", MqttDataView.as_view(), name="mqtt_data"),
+    path("route/update/", RouteStateView.as_view(), name="update_routeVStrains"),
 ]

@@ -636,3 +636,65 @@ class MqttDataView(APIView):
         # For example: set_latest_location(train_name, data)
 
         return Response({"message": "Data received"}, status=status.HTTP_200_OK)
+    
+
+class RouteStateView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        print("Raw request data:", request.body)
+        print("Parsed request.data:", request.data)
+        try:
+            state = int(request.data.get('state'))
+            print("----", state)
+        except (ValueError, TypeError):
+            return Response({'error': 'state must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
+
+        route_id = request.data.get('route_id')
+        train_name = request.data.get("train_name")
+
+        if route_id is None or train_name is None:
+            return Response({'error': 'route_id and train_name are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        route = get_object_or_404(Routes, route_id=route_id)
+        sel_train = Trains.objects.filter(train_name=train_name).first()
+        if not sel_train:
+            return Response({'error': 'Train not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        if state == 0:
+            sel_train.route = route.route_id
+            sel_train.save()
+
+            station_list = route.station_list
+            station_names = {}
+            for station_id in station_list.keys():
+                station_obj = Station.objects.filter(station_ID=station_id).first()
+                if station_obj:
+                    station_names[station_id] = station_obj.station_name
+                else:
+                    station_names[station_id] = "Unknown"
+
+            route.state = True
+            route.save()
+
+            return Response({'station_list': station_names}, status=status.HTTP_200_OK)
+
+        elif state == 1:
+            station_id = request.data.get('station_id')
+            if not station_id:
+                return Response({'error': 'station_id is required for state 1'}, status=status.HTTP_400_BAD_REQUEST)
+
+            sel_train.last_station = station_id
+            sel_train.save()
+
+            return Response({'message': 'Train last_station updated'}, status=status.HTTP_200_OK)
+
+        elif state == 2:
+            route.state = False
+            route.save()
+            sel_train.route = 0
+            sel_train.save()
+            return Response({'message': 'Route state reset to 0'}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'error': 'Invalid state value'}, status=status.HTTP_400_BAD_REQUEST)
