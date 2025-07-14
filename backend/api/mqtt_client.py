@@ -4,9 +4,7 @@ import threading
 import uuid
 import ssl
 import json
-from .helper import process_task_id_3
-from .location_cache import set_latest_location
-
+import time
 
 mqtt_client = None
 client_lock = threading.Lock()
@@ -70,7 +68,31 @@ def start_mqtt_client():
             mqtt_client.connect(settings.MQTT_BROKER_URL, settings.MQTT_BROKER_PORT)
     mqtt_client.loop_forever()
 
-def publish_message(data,topic):
-    payload = json.dumps(data)
-    mqtt_client.publish(topic, payload)
-    print(f"📤 Published to {topic}: {payload}")
+def publish_message(data, topic):
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("✅ Connected to AWS IoT for publishing!")
+            result = client.publish(topic, json.dumps(data), qos=1)
+            print(f"📤 Publish result: {result.rc}")
+        else:
+            print(f"❌ Failed to connect for publishing: {rc}")
+        # Disconnect shortly after publishing
+        time.sleep(1)
+        client.disconnect()
+
+    client_id = f"publisher-{uuid.uuid4()}"
+    pub_client = mqtt.Client(client_id=client_id, clean_session=True)
+    pub_client.enable_logger()
+    pub_client.on_connect = on_connect
+
+    pub_client.tls_set(
+        ca_certs=settings.MQTT_CA_PATH,
+        certfile=settings.MQTT_CERT_PATH,
+        keyfile=settings.MQTT_KEY_PATH,
+    )
+
+    print(f"🔌 Connecting to AWS IoT as {client_id}...")
+    pub_client.connect(settings.MQTT_BROKER_URL, settings.MQTT_BROKER_PORT)
+    pub_client.loop_forever()  # This blocks until disconnect is called
+
+
