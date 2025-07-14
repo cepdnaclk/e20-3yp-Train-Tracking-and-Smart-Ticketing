@@ -610,7 +610,6 @@ class MqttDataView(APIView):
             task_ID = data.get("task_ID")
 
             if task_ID == 4:
-                print("---------------------------------------------------------------------------")
                 train_name = data.get("train_name")
                 lat = data.get("latitude")
                 lon = data.get("longitude")
