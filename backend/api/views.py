@@ -715,7 +715,7 @@ class PassengerListView(ListAPIView):
 def DeletePassengerView(request, pk):
     try:
         passenger = Passenger.objects.get(pk=pk)
-        user = passenger.user  # if you have a OneToOneField to User
+        user = passenger.user  
         passenger.delete()
         if user:
             user.delete()
