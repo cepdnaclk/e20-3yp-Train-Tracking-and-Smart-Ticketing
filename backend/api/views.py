@@ -759,67 +759,55 @@ class CustomPasswordResetView(APIView):
             return JsonResponse({"success": True})
         return JsonResponse({"error": "Invalid request."}, status=400)
 
-class CardCountTodayView(APIView):
+
+class StationStatisticsView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, station_id):
         try:
-            # Ensure station exists
-            station = Station.objects.get(station_ID=station_id)
-
-            # Filter cards issued today at the station
-            today = date.today()
-            count = Card.objects.filter(issued_station=station, issued_date=today).count()
-
-            return Response({
-                "station_id": station_id,
-                "issued_today": count
-            }, status=status.HTTP_200_OK)
-
-        except Station.DoesNotExist:
-            return Response({"error": "Station not found."}, status=status.HTTP_404_NOT_FOUND)
-
-
-class PassengerFlowStatsView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, station_id):
-        try:
-            # Get station object
+            # 1. Validate Station
             station = Station.objects.get(station_ID=station_id)
             station_name = station.station_name
+            today = date.today()
 
-            # 1. Count of passengers arriving at this station
+            # 2. Cards issued today at this station
+            issued_today = Card.objects.filter(issued_station=station, issued_date=today).count()
+
+            # 3. Passenger stats
             incoming_count = Transaction.objects.filter(E_station=station_name).count()
-
-            # 2. Top 5 source stations arriving at this station
-            top_incoming_stations = (
+            top_incoming_sources = (
                 Transaction.objects.filter(E_station=station_name)
                 .values('S_station')
                 .annotate(count=Count('S_station'))
                 .order_by('-count')[:5]
             )
 
-            # 3. Count of passengers departing from this station
             outgoing_count = Transaction.objects.filter(S_station=station_name).count()
-
-            # 4. Top 5 destination stations from this station
-            top_outgoing_stations = (
+            top_outgoing_destinations = (
                 Transaction.objects.filter(S_station=station_name)
                 .values('E_station')
                 .annotate(count=Count('E_station'))
                 .order_by('-count')[:5]
             )
 
+            # 4. Trains that go through this station
+            matching_routes = Routes.objects.filter(station_list__contains=[station_name])
+            route_ids = [route.route_id for route in matching_routes]
+
+            trains_through_station = Trains.objects.filter(route__in=route_ids).values(
+                'train_name', 'location', 'last_station', 'route'
+            )
+
             return Response({
                 "station_id": station_id,
                 "station_name": station_name,
+                "issued_today": issued_today,
                 "incoming_passengers": incoming_count,
-                "top_incoming_sources": top_incoming_stations,
+                "top_incoming_sources": top_incoming_sources,
                 "outgoing_passengers": outgoing_count,
-                "top_outgoing_destinations": top_outgoing_stations,
+                "top_outgoing_destinations": top_outgoing_destinations,
+                "trains_through_station": list(trains_through_station),
             }, status=status.HTTP_200_OK)
 
         except Station.DoesNotExist:
             return Response({"error": "Station not found."}, status=status.HTTP_404_NOT_FOUND)
-
