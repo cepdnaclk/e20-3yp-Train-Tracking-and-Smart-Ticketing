@@ -80,7 +80,7 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -175,4 +175,22 @@ MQTT_CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "DjangoBackend")
 MQTT_SUBSCRIBE_TOPICS = [
     "esp32/stationpub/#",   # All station pub topics
     "gps/#",                 # All GPS topics (multi-level)
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nadeehansi80@gmail.com'
+EMAIL_HOST_PASSWORD = "rgyb zmnu vnud vupd"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://raillynk.site",
+    "http://localhost:5173",
 ]

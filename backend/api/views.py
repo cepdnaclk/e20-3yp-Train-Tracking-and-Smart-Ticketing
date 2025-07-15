@@ -17,12 +17,17 @@ from .mqtt_client import publish_message
 from django.utils.timezone import now
 from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
-from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer
+from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer, PassengerSerializer
 import paho.mqtt.client as mqtt
 import ssl
 from neo4j import GraphDatabase
 import os
 from dotenv import load_dotenv
+from rest_framework.generics import ListAPIView
+from rest_framework import status, permissions
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.forms import PasswordResetForm
+from datetime import date
 
 load_dotenv()
 #mqtt_client = start_mqtt_client()
@@ -697,3 +702,124 @@ class RouteStateView(APIView):
 
         else:
             return Response({'error': 'Invalid state value'}, status=status.HTTP_400_BAD_REQUEST)
+
+class PassengerListView(ListAPIView):
+    queryset = Passenger.objects.all()
+    serializer_class = PassengerSerializer
+
+
+
+# views.py
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def DeletePassengerView(request, pk):
+    try:
+        passenger = Passenger.objects.get(pk=pk)
+        user = passenger.user  # if you have a OneToOneField to User
+        passenger.delete()
+        if user:
+            user.delete()
+        return Response({"message": "Passenger deleted"}, status=status.HTTP_204_NO_CONTENT)
+    except Passenger.DoesNotExist:
+        return Response({"error": "Passenger not found"}, status=status.HTTP_404_NOT_FOUND)
+
+  
+
+class UpdatePassengerProfileView(APIView):
+    def put(self, request):
+        try:
+            passenger = Passenger.objects.get(user=request.user)
+        except Passenger.DoesNotExist:
+            return Response({"error": "You are not authenticated as a passenger."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = PassengerSerializer(passenger, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class CustomPasswordResetView(APIView):
+    permission_classes = [] 
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        email = data.get('email')
+
+        if not User.objects.filter(email=email).exists():
+            return JsonResponse({"email": "This email is not registered."}, status=400)
+
+        form = PasswordResetForm(data)
+        if form.is_valid():
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                email_template_name='registration/password_reset_email.html',
+            )
+            return JsonResponse({"success": True})
+        return JsonResponse({"error": "Invalid request."}, status=400)
+
+class CardCountTodayView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, station_id):
+        try:
+            # Ensure station exists
+            station = Station.objects.get(station_ID=station_id)
+
+            # Filter cards issued today at the station
+            today = date.today()
+            count = Card.objects.filter(issued_station=station, issued_date=today).count()
+
+            return Response({
+                "station_id": station_id,
+                "issued_today": count
+            }, status=status.HTTP_200_OK)
+
+        except Station.DoesNotExist:
+            return Response({"error": "Station not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class PassengerFlowStatsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, station_id):
+        try:
+            # Get station object
+            station = Station.objects.get(station_ID=station_id)
+            station_name = station.station_name
+
+            # 1. Count of passengers arriving at this station
+            incoming_count = Transaction.objects.filter(E_station=station_name).count()
+
+            # 2. Top 5 source stations arriving at this station
+            top_incoming_stations = (
+                Transaction.objects.filter(E_station=station_name)
+                .values('S_station')
+                .annotate(count=Count('S_station'))
+                .order_by('-count')[:5]
+            )
+
+            # 3. Count of passengers departing from this station
+            outgoing_count = Transaction.objects.filter(S_station=station_name).count()
+
+            # 4. Top 5 destination stations from this station
+            top_outgoing_stations = (
+                Transaction.objects.filter(S_station=station_name)
+                .values('E_station')
+                .annotate(count=Count('E_station'))
+                .order_by('-count')[:5]
+            )
+
+            return Response({
+                "station_id": station_id,
+                "station_name": station_name,
+                "incoming_passengers": incoming_count,
+                "top_incoming_sources": top_incoming_stations,
+                "outgoing_passengers": outgoing_count,
+                "top_outgoing_destinations": top_outgoing_stations,
+            }, status=status.HTTP_200_OK)
+
+        except Station.DoesNotExist:
+            return Response({"error": "Station not found."}, status=status.HTTP_404_NOT_FOUND)
+

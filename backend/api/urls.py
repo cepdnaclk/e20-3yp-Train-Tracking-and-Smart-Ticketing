@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import RouteStateView, ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView
+from .views import RouteStateView, ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView,PassengerListView,DeletePassengerView,UpdatePassengerProfileView,CustomPasswordResetView,CardCountTodayView,PassengerFlowStatsView
+from django.contrib.auth import views as auth_view
 
 urlpatterns = [
     path('passengers/new/', CreatePassengerView.as_view()),
@@ -28,4 +29,15 @@ urlpatterns = [
     path("loc/", ReceiveLocationView.as_view(), name="location"),
     path("mqtt-data/", MqttDataView.as_view(), name="mqtt_data"),
     path("route/update/", RouteStateView.as_view(), name="update_routeVStrains"),
+    path('passengers/', PassengerListView.as_view(), name='passenger-list'),
+    path('passengers/delete/<int:pk>/', DeletePassengerView, name='delete-passenger'),
+    path('passenger/update/',UpdatePassengerProfileView.as_view(),name = 'update-profile'),
+    path('reset_password/', CustomPasswordResetView.as_view(), name='reset_password'),
+    path('reset_password_sent/', auth_view.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(template_name = "registration/password_reset_confirm.html"),name='password_reset_confirm'),
+    path('reset_password_complete/', auth_view.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('station/<str:station_id>/cards-today/', CardCountTodayView.as_view(), name='cards-today-count'),
+    path('station/<str:station_id>/flow-stats/', PassengerFlowStatsView.as_view(), name='station-flow-stats'),
+
+
 ]

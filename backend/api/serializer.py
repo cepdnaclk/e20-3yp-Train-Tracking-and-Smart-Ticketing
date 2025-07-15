@@ -128,3 +128,10 @@ class TrainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trains
         fields = '__all__'
+
+class PassengerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Passenger
+        fields = ['id','email', 'nic_number', 'first_name', 'last_name', 'dob', 'address', 'phone']
+        read_only_fields = ['email', 'nic_number']  # Optional, if you want to prevent changing these
+
