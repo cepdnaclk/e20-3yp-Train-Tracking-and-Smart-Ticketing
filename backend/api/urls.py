@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RouteStateView, ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView,PassengerListView,DeletePassengerView,UpdatePassengerProfileView,CustomPasswordResetView,CardCountTodayView,PassengerFlowStatsView
+from .views import RouteStateView, ReceiveLocationView, ReceiveGPSView, TrainLocationListView, TrainRouteDetailsView, CreateTrainView, StationListView, CreateRouteView, FindRoute, AdminDailyReportView, PassengerRechargesView, PassengerTransactionsView, TransactionListView, CreateRouteView, RechargeCardView, CreateCardView, PassengerAndCardDetailsView, CreatePassengerView, CreateStationView, PassengerSignupView, StationSignupView, AdminSignupView, UserLoginView,MqttDataView,PassengerListView,DeletePassengerView,UpdatePassengerProfileView,CustomPasswordResetView,StationStatisticsView
 from django.contrib.auth import views as auth_view
 
 urlpatterns = [
@@ -36,8 +36,6 @@ urlpatterns = [
     path('reset_password_sent/', auth_view.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(template_name = "registration/password_reset_confirm.html"),name='password_reset_confirm'),
     path('reset_password_complete/', auth_view.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('station/<str:station_id>/cards-today/', CardCountTodayView.as_view(), name='cards-today-count'),
-    path('station/<str:station_id>/flow-stats/', PassengerFlowStatsView.as_view(), name='station-flow-stats'),
-
+    path('station/statistics/<int:station_id>/', StationStatisticsView.as_view(), name='station-statistics'),
 
 ]
