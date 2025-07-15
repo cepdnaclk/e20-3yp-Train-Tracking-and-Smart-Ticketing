@@ -21,3 +21,4 @@ gunicorn
 cryptography
 redis
 requests
+django-rest-passwordreset==1.2.1
