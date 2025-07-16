@@ -135,3 +135,30 @@ class PassengerSerializer(serializers.ModelSerializer):
         fields = ['id','email', 'nic_number', 'first_name', 'last_name', 'dob', 'address', 'phone']
         read_only_fields = ['email', 'nic_number']  # Optional, if you want to prevent changing these
 
+class TopSourceSerializer(serializers.Serializer):
+    S_station = serializers.CharField()
+    count = serializers.IntegerField()
+
+class TopDestinationSerializer(serializers.Serializer):
+    E_station = serializers.CharField()
+    count = serializers.IntegerField()
+
+class TrainsThroughStationSerializer(serializers.Serializer):
+    train_name = serializers.CharField()
+    location = serializers.CharField()
+    last_station = serializers.CharField()
+    route = serializers.CharField()
+
+class StationStatisticsSerializer(serializers.Serializer):
+    station_id = serializers.CharField()
+    station_name = serializers.CharField()
+    issued_today = serializers.IntegerField()
+
+    incoming_passengers = serializers.IntegerField()
+    top_incoming_sources = TopSourceSerializer(many=True)
+
+    outgoing_passengers = serializers.IntegerField()
+    top_outgoing_destinations = TopDestinationSerializer(many=True)
+
+    trains_through_station = TrainsThroughStationSerializer(many=True)
+

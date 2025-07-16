@@ -191,6 +191,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://raillynk.site",
+    "https://main.dc21kqnkqpsk8.amplifyapp.com",
     "http://localhost:5173",
 ]
