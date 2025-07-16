@@ -17,7 +17,7 @@ from .mqtt_client import publish_message
 from django.utils.timezone import now
 from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
-from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer, PassengerSerializer
+from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer, PassengerSerializer,StationStatisticsSerializer
 import paho.mqtt.client as mqtt
 import ssl
 from neo4j import GraphDatabase
@@ -810,16 +810,20 @@ class StationStatisticsView(APIView):
                 'train_name', 'location', 'last_station', 'route'
             )
 
-            return Response({
+            # 5. Prepare data
+            data = {
                 "station_id": station_id,
                 "station_name": station_name,
                 "issued_today": issued_today,
                 "incoming_passengers": incoming_count,
-                "top_incoming_sources": top_incoming_sources,
+                "top_incoming_sources": list(top_incoming_sources),
                 "outgoing_passengers": outgoing_count,
-                "top_outgoing_destinations": top_outgoing_destinations,
+                "top_outgoing_destinations": list(top_outgoing_destinations),
                 "trains_through_station": list(trains_through_station),
-            }, status=status.HTTP_200_OK)
+            }
+
+            serializer = StationStatisticsSerializer(data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Station.DoesNotExist:
             return Response({"error": "Station not found."}, status=status.HTTP_404_NOT_FOUND)
