@@ -7,7 +7,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
-from datetime import datetime
+from datetime import datetime, timedelta
+from calendar import month_name
 from rest_framework import generics
 from django.conf import settings
 from django.db.models import Sum, Count
@@ -22,6 +23,7 @@ import paho.mqtt.client as mqtt
 import ssl
 from neo4j import GraphDatabase
 import os
+from collections import Counter,defaultdict
 from dotenv import load_dotenv
 from rest_framework.generics import ListAPIView
 from rest_framework import status, permissions
@@ -181,16 +183,14 @@ class CreateStationView(generics.CreateAPIView):
     def get(self, request):
         return Response({"error": "send post"}, status=status.HTTP_201_CREATED)"""
         
-        
+
 class PassengerAndCardDetailsView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, nic_number, *args, **kwargs):
         passenger = get_object_or_404(Passenger, nic_number=nic_number)
-
-        # Get card details
         cards = Card.objects.filter(nic_number=passenger)
 
-        # Convert passenger details to JSON
         passenger_data = {
             "nic_number": passenger.nic_number,
             "first_name": passenger.first_name,
@@ -201,25 +201,48 @@ class PassengerAndCardDetailsView(APIView):
             "phone": passenger.phone,
         }
 
-        # Convert card details to JSON
         card_data = [
             {
                 "card_num": card.card_num,
                 "balance": card.balance,
                 "card_type": card.card_type,
                 "issued_date": card.issued_date.strftime("%Y-%m-%d"),
-                "issued_station": card.issued_station.station_name,  # Assuming Station model has a 'name' field
+                "issued_station": card.issued_station.station_name,
             }
             for card in cards
         ]
 
-        # Combine both responses
+        transactions = Transaction.objects.filter(card_num__in=cards)
+        transaction_count = transactions.count()
+
+        # Favorite route calculation with Station name lookup
+        route_pairs = [(t.S_station, t.E_station) for t in transactions if t.S_station and t.E_station]
+        route_counter = Counter(route_pairs)
+        most_common_route = route_counter.most_common(1)[0][0] if route_counter else None
+
+        favorite_route = None
+        if most_common_route:
+            s_station_id, e_station_id = most_common_route
+
+            # Lookup actual station names from Station model
+            s_station_obj = Station.objects.filter(station_ID=s_station_id).first()
+            e_station_obj = Station.objects.filter(station_ID=e_station_id).first()
+
+            favorite_route = {
+                "start_station": s_station_obj.station_name if s_station_obj else s_station_id,
+                "end_station": e_station_obj.station_name if e_station_obj else e_station_id,
+            }
+
         response_data = {
             "passenger": passenger_data,
             "cards": card_data,
+            "transaction_count": transaction_count,
+            "favorite_route": favorite_route
         }
-
+        print(response_data)
         return Response(response_data, status=200)
+
+
 
 
 class CreateCardView(generics.CreateAPIView):
@@ -389,7 +412,7 @@ class PassengerRechargesView(APIView):
         
 
 
-class AdminDailyReportView(APIView):
+"""class AdminDailyReportView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
         today = datetime.today().date()
@@ -414,7 +437,67 @@ class AdminDailyReportView(APIView):
             "monthly_revenue": monthly_revenue,
             "station_usage_percentages": station_percentages
         }
+        print(response_data)
 
+        return Response(response_data, status=status.HTTP_200_OK)"""
+
+class AdminDailyReportView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        today = datetime.today().date()
+        start_of_month = today.replace(day=1)
+
+        # Total counts
+        total_cards = Card.objects.count()
+        total_passengers = Passenger.objects.count()
+        total_stations = Station.objects.count()
+
+        # Revenue calculations
+        daily_revenue = Transaction.objects.filter(date__date=today).aggregate(total=Sum('amount'))['total'] or 0
+        monthly_revenue = Transaction.objects.filter(date__date__gte=start_of_month).aggregate(total=Sum('amount'))['total'] or 0
+
+        # Last 5 months' revenue
+        last_5_months_revenue = {}
+        for i in range(5):
+            month_date = today.replace(day=1) - timedelta(days=30 * i)
+            start_date = month_date.replace(day=1)
+            end_date = (start_date + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+            revenue = Transaction.objects.filter(date__date__gte=start_date, date__date__lte=end_date).aggregate(total=Sum('amount'))['total'] or 0
+            month_name_str = month_name[start_date.month]
+            last_5_months_revenue[month_name_str] = revenue
+
+        # Most busy 5 stations today (based on both S_station and E_station)
+        s_station_counts = Transaction.objects.filter(date__date=today).values('S_station').annotate(count=Count('S_station'))
+        e_station_counts = Transaction.objects.filter(date__date=today).values('E_station').annotate(count=Count('E_station'))
+
+        station_activity = defaultdict(int)
+        for entry in s_station_counts:
+            station_activity[entry['S_station']] += entry['count']
+        for entry in e_station_counts:
+            station_activity[entry['E_station']] += entry['count']
+
+        # Sort and get top 5
+        sorted_stations = sorted(station_activity.items(), key=lambda x: x[1], reverse=True)[:5]
+        busy_stations_today = []
+        for station_id, count in sorted_stations:
+            station_obj = Station.objects.filter(station_ID=station_id).first()
+            station_name = station_obj.station_name if station_obj else station_id
+            busy_stations_today.append({
+                "station": station_name,
+                "activity_count": count
+            })
+
+        response_data = {
+            "total_cards": total_cards,
+            "total_passengers": total_passengers,
+            "total_stations": total_stations,
+            "daily_revenue": daily_revenue,
+            "monthly_revenue": monthly_revenue,
+            "last_5_months_revenue": last_5_months_revenue,
+            "most_busy_stations_today": busy_stations_today
+        }
+        print(response_data)
         return Response(response_data, status=status.HTTP_200_OK)
     
 
@@ -634,22 +717,20 @@ class MqttDataView(APIView):
                 amount = data.get("amount")
                 start = data.get("start")
                 end = data.get("end")
+                result = "same station"
+                if amount < 0:
+                    new_data = {
+                        "nic" : nic,
+                        "amount" : amount,
+                        "end" : end,
+                        "start" : start,
+                    }
 
-                new_data = {
-                    "nic" : nic,
-                    "amount" : amount,
-                    "end" : end,
-                    "start" : start,
-                }
-
-                result = process_task_id_3(new_data)
+                    result = process_task_id_3(new_data)
                 print("[MQTT Response]", result)
 
         except Exception as e:
             print("[MQTT Error]", str(e))
-
-        # Save to DB or cache
-        # For example: set_latest_location(train_name, data)
 
         return Response({"message": "Data received"}, status=status.HTTP_200_OK)
     
