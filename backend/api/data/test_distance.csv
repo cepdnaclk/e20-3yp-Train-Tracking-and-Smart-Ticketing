@@ -1,0 +1,12 @@
+,test_station_0,test_station_1,test_station_2,test_station_3,test_station_4,test_station_5,test_station_6,test_station_7,test_station_8,test_station_9,test_station_10
+test_station_0,,1,,,1,,,,1,,
+test_station_1,1,,1,,,,,,,,
+test_station_2,,1,,1,,,,,,,
+test_station_3,,,1,,,,,,,,
+test_station_4,1,,,,,1,,,,,
+test_station_5,,,,,1,,1,,,,
+test_station_6,,,,,,1,,1,,,
+test_station_7,,,,,,,1,,,,
+test_station_8,1,,,,,,,,,1,
+test_station_9,,,,,,,,,1,,1
+test_station_10,,,,,,,,,,1,

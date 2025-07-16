@@ -18,14 +18,14 @@ class Command(BaseCommand):
         driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
         # File paths
-        station_file = "api/data/sri_lanka_railway_stations.csv"
-        distance_file = "api/data/3yp - Sheet1.csv"
+        station_file = "api/data/test_stations.csv"
+        distance_file = "api/data/test_distance.csv"
 
         # Step 1: Delete all existing data
-        self.stdout.write("❌ Deleting all existing nodes and relationships...")
+        """self.stdout.write("❌ Deleting all existing nodes and relationships...")
         with driver.session() as session:
             session.run("MATCH (n) DETACH DELETE n")
-        self.stdout.write(self.style.WARNING("🧹 All existing data deleted."))
+        self.stdout.write(self.style.WARNING("🧹 All existing data deleted."))"""
 
         # Step 2: Load station data
         stations_df = pd.read_csv(station_file)

@@ -630,6 +630,18 @@ class MqttDataView(APIView):
                 print("Data saved to cache!")
 
             elif task_ID == 3:
+                nic = data.get("nic")
+                amount = data.get("amount")
+                start = data.get("start")
+                end = data.get("end")
+
+                new_data = {
+                    "nic" : nic,
+                    "amount" : amount,
+                    "end" : end,
+                    "start" : start,
+                }
+
                 result = process_task_id_3(new_data)
                 print("[MQTT Response]", result)
 

@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = "Upload SERVES_ROUTE relationships (train schedules) to Neo4j"
 
     def handle(self, *args, **options):
-        file_path = "api/data/train_schedule.csv"  # Update if needed
+        file_path = "api/data/test_route.csv"  # Update if needed
 
         if not os.path.exists(file_path):
             self.stderr.write(f"❌ File not found: {file_path}")

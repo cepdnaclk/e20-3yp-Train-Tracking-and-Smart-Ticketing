@@ -1,0 +1,18 @@
+Route_ID,Station_ID,Station_name,Arrival Time,Departure Time
+10,600,test_station_0,—,1:31
+10,601,test_station_1,1:40,1:41
+10,602,test_station_2,1:50,1:51
+10,603,test_station_3,2:00,—
+11,600,test_station_0,—,1:31
+11,604,test_station_4,1:37,1:38
+11,605,test_station_5,1:45,1:46
+11,606,test_station_6,1:52,1:53
+11,607,test_station_7,2:00,—
+12,600,test_station_0,—,1:31
+12,608,test_station_8,1:40,1:41
+12,609,test_station_9,1:50,1:51
+12,610,test_station_10,2:00,—
+21,600,test_station_0,—,8:11
+21,608,test_station_8,8:16,8:17
+21,609,test_station_9,8:23,8:24
+21,610,test_station_10,8:30,—
