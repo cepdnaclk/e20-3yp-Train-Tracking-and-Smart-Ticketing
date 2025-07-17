@@ -1,286 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RailLynk - Smart Railway</title>
+  <link rel="stylesheet" href="styles.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">RailLink</div>
-            <ul>
-                <li><a href="#introduction">Introduction</a></li>
-                <li><a href="#feature">Features</a></li>
-                <li><a href="#solution-architecture">Solution Architecture</a></li>
-                <li><a href="#hardware">Hardware & Software</a></li>
-                <li><a href="#testing">Testing</a></li>
-                <li><a href="#team">Team</a></li>
-            </ul>
-        </nav>
-        <div class="project-title">
-            <div class="title-container">
-                <h1>RailLink</h1>
-                <p>Train Tracking and Notifier System for Sri Lankan Railway</p>
-            </div>
-        </div>        
-    </header>
-<section id="introduction">
-  <div class="intro-container">
-    <div class="intro-flex">
-      <div class="intro-image-full">
-        <img src="scaner.jpg" alt="Smart Ticketing Scanner">
+<nav>
+  <div class="logo">RailLynk</div>
+  <ul class="main-nav">
+    <li>
+      <a href="#introduction">Introduction</a>
+    </li>
+    <li class="has-submenu">
+      <a href="#feature">Features</a>
+    </li>
+    <li class="has-submenu">
+      <a href="#solution-architecture">Architecture</a>
+      <ul class="submenu">
+        <li><a href="#solution-architecture">Solution Design</a></li>
+        <li><a href="#functionality">System Integration</a></li>
+      </ul>
+    </li>
+    <li class="has-submenu">
+      <a href="#tech-stack">Stack</a>
+      <ul class="submenu">
+        <li><a href="#tech-stack">Technology Stack</a></li>
+        <li><a href="#hardware">Hardware</a></li>
+        <li><a href="#software">Software</a></li>
+      </ul>
+    </li>
+    <li><a href="#security-performance">Security & Performance</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+</nav>
+
+
+  <div class="container">
+    <div class="left-section">
+      <h1>RailLynk - Train<br>Tracking and Smart<br>Ticketing for Sri Lankan<br>Railway</h1>
+      <p>Revolutionizing Sri Lankan railway travel with integrated tracking and smart ticketing solutions.</p>
+      <div class="buttons">
+        <a href="#feature" class="btn btn-outline">View Features</a>
       </div>
-      <div class="intro-text">
-        <h2>Introduction</h2>
-        <p>
-          A smart ticketing and navigation system for Sri Lanka Railways aims to modernize railway travel by introducing a seamless, digital experience for passengers.
-          The smart ticketing and navigation system introduces a card-based system, allowing passengers to tap in and out at stations for a seamless travel experience.
-          This eliminates paper tickets, reduces queues, and ensures efficient fare collection. The system also provides real-time train schedules and route guidance,
-          making railway travel more convenient and modernized.
-        </p>
-      </div>
+    </div>
+    <div class="right-section">
+      <img src="images/train-image.jpg" alt="Train with Sunset" />
     </div>
   </div>
-</section>
 
-<section id = "feature">
-<div class="key-features">
-  <h2>Key Features</h2>
-  <div class="feature-grid">
-    <div class="feature-item">
-      <img src="icon1.jpg" alt="Real-Time Tracking Icon" />
-      <h3>Real-Time Tracking</h3>
-      <p>Live Train Location Updates: Provides real-time train tracking.</p>
+<div id="introduction" class="page2-container">
+  <h1 class="title">Introduction: Transforming Sri Lankan<br>Railway Journeys</h1>
+  
+  <div class="content">
+    <div class="left fade-in-left">
+      <h2>Current Challenges:</h2>
+      <ul>
+        <li>Inefficient Ticketing: Long lines cause daily passenger delays and frustration.</li>
+        <li>No Real-Time Tracking: Passengers lack live updates, causing missed connections and uncertainty.</li>
+      </ul>
     </div>
-    <div class="feature-item">
-      <img src="icon2.png" alt="Smart Ticketing Icon" />
-      <h3>Smart Ticketing</h3>
-      <p>Card-Based Ticketing: Customers tap their smart card to enter and exit stations.</p>
-    </div>
-    <div class="feature-item">
-      <img src="icon3.png" alt="Smart Ticketing Icon" />
-      <h3>Transaction Records Management</h3>
-      <p>All ticketing activities are securely stored and retrievable</p>
+
+    <div class="right fade-in-right">
+      <h2>RailLynk's Vision:</h2>
+      <ul>
+        <li>Card-Based Ticketing</li>
+        <li>Automated Fare Deduction</li>
+        <li>Transaction Management</li>
+        <li>Real-Time Train Tracking</li>
+      </ul>
     </div>
   </div>
-</div>
-</section>
 
-
-<section id="solution-architecture" class="solution-architecture">
-  <div class="sa-container">
-    <div class="sa-text">
-      <h2>Solution Architecture</h2>
-      <p>
-        This architecture integrates smart card scanning hardware, an ESP32-based embedded controller, and a cloud-based backend 
-        to manage secure and real-time communication between customers, station admins, and the central database system hosted on AWS.
-        It ensures efficient and scalable operation of the smart railway ticketing system.
-      </p>
-    </div>
-    <div class="sa-images">
-      <img src="S_a.png" alt="Solution Architecture Diagram 1">
-      <img src="s_a2.png" alt="Solution Architecture Diagram 2">
-    </div>
-  </div>
-</section>
-
-
-<section id="hardware">
-  <div class="hardware-contauner"></div>
-  <h2>Hardware Components</h2>
-  <div class="hardware-grid">
-    <div class="hardware-item">
-      <img src="Relay_Module.jpg" alt="Relay Module">
-      <p><strong>Relay Module</strong><br>Used to control high voltage devices through microcontroller signals.</p>
-    </div>
-    <div class="hardware-item">
-      <img src="RFID.jpg" alt="RFID Reader">
-    <p><strong>RFID Scanner</strong><br>Reads from and writes to RFID smart cards for identifying and authenticating passengers, enabling secure and efficient usage of the smart card system.</p>
-    </div>
-    <div class="hardware-item">
-      <img src="lcd.png" alt="LCD Display">
-      <p><strong>LCD Display</strong><br>Displays real-time information such as ticket status, fare, or station details.</p>
-    </div>
-    <div class="hardware-item">
-      <img src="esp32.jpg" alt="ESP32 Microcontroller">
-      <p><strong>ESP32 Microcontroller</strong><br>Central controller that processes data, communicates with components, and connects to the cloud.</p>
-    </div>
-    <div class="hardware-item">
-      <img src="card.jpg" alt="RFID Cards">
-      <p><strong>RFID Cards</strong><br>Smart travel cards used by passengers for ticketing and entry/exit authentication.</p>
-    </div>
-
-    <div class="hardware-item">
-    <img src="i2c.jpg" alt="i2c">
-    <p><strong>I2C Communicator Module</strong><br>Enables I2C communication with the LCD, allowing efficient data transmission for displaying real-time information.</p>
-    </div>
-    <div class="hardware-item">
-      <img src="elec_s.jpg" alt="elec_s">
-    <p><strong>AC Electric Switch</strong><br>Controls the locking and unlocking of the electric gate by switching the AC power based on system commands.</p>
-</div>
-    <div class="hardware-item">
-    <img src="GPS _GSM .png" alt="gps">
-    <p><strong>GPS and GSM module</strong><br>Find the gps data and transmit.</p>
-    </div>
-      <div class="hardware-item">
-    <img src="converter.png" alt="converter">
-    <p><strong>I5v to 3.3v converter</strong><br>Convert 5v to 3.3v For secure operation of rfid scanner.</p>
-    </div>
-
-  </div>
-  <div class="design-section">
-  <h3>Device Design Overview</h3>
-  <div class="design-images">
-    <div class="design-item">
-      <img src="CAD.png" alt="CAD Design of Smart Ticketing Device">
-      <p><strong>RFID-Based Smart Ticketing Device – CAD Design</strong><br>3D model of the smart ticketing terminal showing the layout of key hardware components.</p>
-    </div>
-    <div class="design-item">
-      <img src="c_d.png"Circuit Diagram">
-      <p><strong>Circuit Diagram</strong><br>Electronic schematic representing the wiring and connectivity of the smart ticketing system.</p>
-    </div>
-  </div>
+  <p class="footer-text">
+    RailLynk aims to solve these challenges, providing more efficient and pleasant travel experiences.
+  </p>
 </div>
 
-</section>
 
+<div class="container" id = "feature">
+    <div class="left1"></div>
 
-<section id="software-system" class="software-section">
-  <div class="software-container">
-    <h2>Software Workflow: Seamless Ticketing and Train Tracking in Action</h2>
+    <div class="right1">
+      <h1 class="reveal" >Key Features: Seamless Travel, Smart Operations</h1>
+      <div class="feature reveal">
+        
+      <div class="features">
+              <div>
+            <img src="images/train_icon.png" class="feature-icon">
+            <div class="feature-title">Real-Time Train Tracking</div>
+            <div class="feature-text">
+Provides passengers and station operators with accurate, live updates on train positions </div>
+          </div>
+
+          <div>
+          <img src="images/icon2.png" class="feature-icon">
     
-    <div class="software-steps">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Smart Ticketing System</h3>
-        <p>
-          Passengers use a smart card to enter the train by tapping at the entry gate.
-          The system verifies the card, checks the balance, and grants access if the amount is sufficient.
-        </p>
+            <div class="feature-title">Smart Ticketing</div>
+            <div class="feature-text"> Card-Based Ticketing: Customers tap their smart card to enter and exit stations.
+            </div>
+          </div>
+
+          <div>
+          <img src="images/icon5.jpeg" class="feature-icon">
+  
+            <div class="feature-title">Passenger Management</div>
+            <div class="feature-text">
+              Complete passenger registration, profile management, and travel history tracking system.
+            </div>
+          </div>
+<div>
+          <img src="images/icon4.png" class="feature-icon">
+  
+            <div class="feature-title">Station Operations</div>
+            <div class="feature-text">
+              Efficient station management tools for platform allocation and passenger flow control.
+            </div>
+          </div>
+            </div>
+        </div>
+        </div>
+      </div>
       </div>
 
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Real-Time Travel Monitoring</h3>
-        <p>
-          At the exit station, passengers tap the card again. The system calculates the fare, deducts it from the card balance, and logs the trip.
-        </p>
-      </div>
 
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Real-Time Train Tracking</h3>
-        <p>
-          GPS modules on each train transmit real-time location data to the backend. This allows passengers and station staff to monitor train positions, arrival times, and delays with up-to-date information.
-        </p>
-      </div>
 
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <h3>Transaction & Data Management</h3>
-        <p>
-          Transaction details are stored securely in the backend. Passengers can access travel and payment history through the dashboard.
-        </p>
-      </div>
+<div id="solution-architecture" class="architecture-section">
+  <h1  >Solution Architecture</h1>
+  <div class="architecture-images reveal">
+    <h2>Solution Architecture for Smart Ticketing</h2>
+    <img src="images/solution_ar1.png" alt="Solution Diagram 1" class="arch-img" />
+    <h2>Solution Architecture for Tracking</h2>
+    <img src="images/solution_ar2.png" alt="Solution Diagram 2" class="arch-img" />
+  </div>
+</div>
+
+  <!-- System Functionality Details -->
+<div class="hardware-details reveal" id="functionality">
+  <h1 style="text-align: center;">System Functionality & Integration</h1>
+
+  <div class="details-grid">
+    <div class="detail-block">
+      <h3>Smart Card Security (AES Encrypted RFID)</h3>
+      <p>
+        Each RFID card uses AES encryption and contains 16 memory blocks. We use Block 0 to store the card UID and Block 2 to store travel data such as start station ID, travel time, and available balance. This enables secure offline user verification even when backend access is unavailable.
+      </p>
     </div>
 
-    <div class="software-summary">
+    <div class="detail-block">
+      <h3>Online & Offline Ticketing Modes</h3>
       <p>
-        Our <strong>Smart Railway Ticketing & Navigation System</strong> is built to make railway travel more <strong>efficient, secure, and user-friendly</strong>. 
-        It provides a modern digital solution for Sri Lanka Railways that meets the needs of both passengers and administrators. 🚆✨
+        The system operates in two modes:
+        <strong>Online Mode</strong> verifies the card balance and syncs with the backend in real time. <strong>Offline Mode</strong> authorizes passengers locally using card data and stores travel logs in ESP32 flash memory. Once online, all stored logs are synced securely to the backend.
+      </p>
+    </div>
+
+    <div class="detail-block">
+      <h3>ESP32 with Dual-Core Processing</h3>
+      <p>
+        The ESP32 uses its dual-core architecture efficiently. One core handles RFID scanning and user interaction, while the other manages backend communication (via GSM), card transaction processing, and GPS data updates , all in parallel.
+      </p>
+    </div>
+
+    <div class="detail-block">
+      <h3>GPS + GSM for Train Tracking</h3>
+      <p>
+        A SIM808 module connects GPS with GSM functionality. It captures the live location of the train and transmits it through a 2G GSM network. A proxy server then upgrades this signal to HTTPS to ensure secure communication with cloud servers.
+      </p>
+    </div>
+
+    <div class="detail-block">
+      <h3>Flash Memory for Offline Logging</h3>
+      <p>
+        When the system is offline, all tap-in and tap-out data (station ID, time, fare details) are written to local flash memory. This ensures nothing is lost. When internet is restored, the ESP32 pushes this data to the backend.
+      </p>
+    </div>
+
+    <div class="detail-block">
+      <h3>Real-time Display & Feedback</h3>
+      <p>
+        The LCD connected via an I2C interface provides instant visual feedback, showing card status, balance alerts, validation success, failure, or error messages. This helps both users and system administrators in debugging or verifying actions.
       </p>
     </div>
   </div>
+</div>
+
+<div class="tech-stack-section" id="tech-stack">
+  <h1>Technology Stack</h1>
+  <div class="tech-columns">
+    
+    <!-- Backend -->
+    <div class="tech-category reveal">
+      <h2><i class="fas fa-server"></i> Backend</h2>
+      <ul>
+        <li>
+          <strong>Django Framework:</strong><br>
+          Used as the main backend framework for handling business logic, APIs, and database interactions.
+        </li>
+        <li>
+          <strong>MySQL Database:</strong><br>
+          Stores core data such as passenger profiles, station data, and travel logs.
+        </li>
+        <li>
+          <strong>Neo4j Graph DB:</strong><br>
+          Manages dynamic relationships between stations for optimal route planning and real-time tracking.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Frontend -->
+    <div class="tech-category reveal">
+      <h2><i class="fas fa-laptop-code"></i> Frontend</h2>
+      <ul>
+        <li>
+          <strong>React.js:</strong><br>
+          Powers a responsive and interactive user interface for both passengers and administrators.
+        </li>
+        <li>
+          <strong>JWT Tokens & Protected Routes:</strong><br>
+          Ensures secure access to sensitive pages passenger dashboards.
+        </li>
+        <li>
+          <strong>Role-Based Access (UI):</strong><br>
+          Dynamically adjusts UI based on user roles (e.g., admin, Station Staff, passenger).
+        </li>
+      </ul>
+    </div>
+
+    <!-- Cloud -->
+    <div class="tech-category reveal">
+      <h2><i class="fas fa-cloud"></i> Cloud</h2>
+      <ul>
+        <li>
+          <strong>AWS EC2:</strong><br>
+          Hosts backend services and APIs on a scalable cloud environment.
+        </li>
+            <strong>AWS Amplify:</strong><br>
+            Hosts the React-based frontend securely with continuous deployment.<br><br>
+
+        </li>
+        <li>
+          <strong>AWS RDS:</strong><br>
+          Managed MySQL instance for secure and reliable database operations.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Security -->
+    <div class="tech-category reveal">
+      <h2><i class="fas fa-lock"></i> Security</h2>
+      <ul>
+        <li>
+          <strong>AES Encryption (Data):</strong><br>
+          Ensures sensitive data like NIC numbers are encrypted.
+        </li>
+        <li>
+          <strong>JWT Validation (Backend):</strong><br>
+          Every request is authenticated using server-side token validation.
+        </li>
+        <li>
+          <strong>Role Permissions:</strong><br>
+          Prevents unauthorized access to protected resources by enforcing user roles in both frontend and backend.
+        </li>
+        <li>
+          <strong>HTTPS-secured APIs:</strong><br>
+          All client-server communication is encrypted using TLS for maximum security.
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="hardware" class="hardware-section">
+  <h1 >Hardware</h1>
+
+  <!-- Hardware -->
+  <div class="hardware-container">
+    <div class="hardware-card reveal">
+      <img src="images/esp32.jpg" class="hardware-icon" alt="ESP32" />
+      <h3>ESP32 Microcontroller</h3>
+      <p>Processes data, controls LCD, connects to AWS, and manages RFID scanner and Wi-Fi.</p>
+    </div>
+
+    <div class="hardware-card reveal">
+      <img src="images/card.jpg" class="hardware-icon" alt="RFID Card" />
+      <h3>RFID Card</h3>
+      <p>Stores passenger NIC, travel time, station ID, and card validity.</p>
+    </div>
+
+    <div class="hardware-card reveal">
+      <img src="images/RFID.jpg" class="hardware-icon" alt="RFID Scanner" />
+      <h3>RFID Sensor</h3>
+      <p>Reads and writes to the RFID card, triggers train access logging.</p>
+    </div>
+
+    <div class="hardware-card reveal">
+      <img src="images/lcd.png" class="hardware-icon" alt="LCD Screen" />
+      <h3>LCD Display</h3>
+      <p>Shows travel info, validation messages, and debug outputs.</p>
+    </div>
+
+    <div class="hardware-card reveal">
+      <img src="images/GPS _GSM .png" class="hardware-icon" alt="SIM808" />
+      <h3>SIM808 GPS + GSM</h3>
+      <p>Receives GPS signals and transmits coordinates to cloud (AWS) via GSM.</p>
+    </div>
+
+    <div class="hardware-card reveal">
+      <img src="images/i2c.jpg" class="hardware-icon" alt="I2C Module" />
+      <h3>I2C Converter</h3>
+      <p>Enables serial-to-parallel communication for the LCD screen.</p>
+    </div>
+
+
+  </div>
+
+<div id="scanner-models" class="model-section">
+  <h2 class="section-title reveal">3D Models & Prototypes</h2>
+  <p class="section-subtitle">From design to reality – development of the scanner and door system.</p>
+
+  <!-- Scanner Prototypes -->
+  <div class="model-grid reveal">
+    <div class="model-block">
+      <img src="images/scanner1.png" alt="Scanner Prototype 1" class="model-image" />
+    </div>
+    <div class="model-block">
+      <img src="images/scanner2.png" alt="Scanner Prototype 2" class="model-image" />
+    </div>
+    <div class="model-block">
+      <img src="images/scanner3.png" alt="Scanner Prototype 3" class="model-image" />
+    </div>
+        <div class="model-block">
+      <img src="images/door1.jpeg" alt="Scanner Prototype 3" class="model-image" />
+    </div>
+
+  </div>
+<h2 class="section-title reveal">Final Product</h2>
+
+<!-- Final Scanner -->
+<div class="final-model reveal">
+  <h3>Final Product – Smart Scanner</h3>
+  <img src="images/Scanner.jpg" alt="Final Scanner" class="final-image" />
+  <p class="final-description">
+    The smart scanner allows passengers to tap in and out easily using an RFID smart card. 
+    When a passenger taps the card, the system reads secure data stored on the card such as 
+    the Card ID, balance. At the entry point, it checks if the card 
+    is authorized and if the balance is sufficient. Then it records the station ID and timestamp 
+    onto the card. At the exit station, the scanner calculates the fare, validates 
+    the trip, and updates the backend or stores the transaction in offline memory.
+  </p>
+</div>
+
+<!-- Final Electric Door -->
+<div class="final-model reveal">
+  <h3>Final Product – Automated Electric Door</h3>
+  <img src="images/door2.jpeg" alt="Real Door Image" class="final-image" />
+  <p class="final-description">
+    The electric door unlocks only if the passenger is authorized. During entry, the system verifies 
+    the smart card’s validity and checks whether the starting balance is sufficient for the journey. 
+    If these conditions are met, the door opens automatically to allow boarding. At the destination, 
+    when the passenger taps out, the door unlocks again after verifying the trip and authorizing the 
+    exit based on valid travel data. This ensures secure and controlled access.
+  </p>
+</div>
+
+</div>
+
+
+<section class="software-section" id="software">
+  <h1>Software Functionality Overview</h1>
+  <p class="section-subtitle reveal">
+    Our smart railway web app is designed to streamline operations, simplify travel, and ensure seamless interaction between Passengers, Station Officers, and Admins. Each user role gets a dedicated dashboard tailored to their tasks and responsibilities.
+  </p>
+
+  <div class="software-cards">
+    
+    <!-- Passenger Panel -->
+    <div class="software-card reveal">
+      <h2>Passenger ashboard</h2>
+      <p class="card-description">
+        Passengers can register and log in to manage their journey effortlessly using a smart card-based system.
+      </p>
+      <ul>
+        <li>Login securely and edit personal profile</li>
+        <li>View recharge history and transaction summaries</li>
+        <li>Search for trains to a specific destination and view real-time location</li>
+        <li>Track journey history based on smart card activity</li>
+        <li>Recharge smart cards using Google Pay integration</li>
+      </ul>
+    <img src="images/Passenger.png" alt="Passenger Icon" class="software-icon" />
+    </div>
+
+    <!-- Station Panel -->
+    <div class="software-card reveal">
+      <h2>Station Dashboard</h2>
+      <p class="card-description">
+        Station staff can access powerful tools to register passengers, monitor activity, and view daily station performance.
+      </p>
+      <ul>
+        <li>Register new passengers and delete accounts as needed</li>
+        <li>View daily stats including issued cards and passenger counts</li>
+        <li>Monitor train arrivals and departures in real-time</li>
+        <li>Analyze graphs showing station-to-station passenger flow</li>
+        <li>Access operational insights for efficient station management</li> 
+      </ul>
+      <img src="images/station.png" alt="Station Icon" class="software-icon" />
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="software-card reveal">
+      <h2>Admin Controls</h2>
+      <p class="card-description">
+        Admins oversee the entire system: register stations, analyze revenue, and monitor all stations and train movement live.
+      </p>
+      <ul>
+        <li>Register both passengers and station operators</li>
+        <li>Generate and review monthly revenue reports</li>
+        <li>Access a live train tracking system with real-time maps</li>
+        <li>View station usage statistics and analytics</li>
+        <li>Oversee entire system operations and status</li>
+      </ul>
+      <img src="images/admin.png" alt="Admin Icon" class="software-icon" />
+    </div>
+
+  </div>
 </section>
 
-<section id="testing-section" class="testing-section">
-  <div class="testing-container">
-    <h2>🔷 13. Software & Hardware Testing</h2>
+<!-- Train Tracking Section -->
+<section id="train-tracking" class="section reveal">
+  <h2 class="section-title">Train Tracking</h2>
+  
+  <div class="video-container">
+    <img src="images/traking.png" alt="Train Tracking Demo" class="tracking-image" />
+    
+    <p class="video-description">
+      This demo showcases real-time train tracking using GPS and GSM modules, integrated with our backend system.
+    </p>
+  </div>
+</section>
 
-    <div class="testing-cards">
-      <!-- Front-End Testing -->
-      <div class="test-card">
-        <h3>Front-End Testing</h3>
-        <ul>
-          <li><strong>Tools:</strong> Jest & React Testing Library</li>
-          <li><strong>Unit Tests:</strong> Individual components and functions tested separately</li>
-          <li><strong>Integration Tests:</strong> Recharge form + balance update working together</li>
-          <li><strong>CI/CD:</strong> GitHub Actions for automated testing on every push/merge</li>
+
+
+<div id="testing" class="testing-section">
+  <h1>Comprehensive Testing Strategy</h1>
+
+  <div class="testing-cards">
+    <!-- Frontend Testing -->
+    <div class="testing-card reveal fade-in-left">
+      <h2>Front-End Testing</h2>
+      <ul>
+        <li><strong>Tools:</strong> Jest & React Testing Library</li>
+        <li><strong>Unit Tests:</strong> Individual components and functions tested separately</li>
+        <li><strong>Integration Tests:</strong> Recharge form + balance update working together</li>
+        <li><strong>CI/CD:</strong> GitHub Actions for automated testing on every push/merge</li>
+      </ul>
+    </div>
+
+    <!-- Backend Testing -->
+    <div class="testing-card reveal fade-in-right">
+      <h2>Back-End Testing</h2>
+      <ul>
+        <li><strong>Tool:</strong> Postman</li>
+        <li><strong>API Testing:</strong></li>
+        <ul class="nested">
+          <li>Passenger login & authentication</li>
+          <li>Card scan validation and response</li>
+          <li>Recharge and balance updates</li>
         </ul>
-      </div>
+        <li>Tested data flow, response codes, and error handling</li>
+      </ul>
+    </div>
 
-      <!-- Back-End Testing -->
-      <div class="test-card">
-        <h3>Back-End Testing</h3>
-        <ul>
-          <li><strong>Tool:</strong> Postman</li>
-          <li><strong>API Testing:</strong></li>
-          <ul>
-            <li>Passenger login & authentication</li>
-            <li>Card scan validation and response</li>
-            <li>Recharge and balance updates</li>
-          </ul>
-          <li>Tested data flow, response codes, and error handling</li>
-        </ul>
-      </div>
-
-      <!-- Hardware Testing -->
-      <div class="test-card">
-        <h3>Hardware Testing</h3>
-        <ul>
-          <li>Manual testing with ESP32 + RFID + Scanner</li>
-          <li><strong>Validated:</strong></li>
-          <ul>
-            <li>Card reading accuracy</li>
-            <li>Network reliability under load</li>
-          </ul>
+    <!-- Hardware Testing -->
+    <div class="testing-card reveal fade-in-up">
+      <h2>Hardware Testing</h2>
+      <ul>
+        <li>Manual testing with ESP32 + RFID + Scanner</li>
+        <li>Validated:</li>
+        <ul class="nested">
+          <li>Card reading accuracy</li>
+          <li>Network reliability under load</li>
           <li>Monitored power consumption and device resets</li>
         </ul>
-      </div>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Images Row -->
+  <div class="testing-images">
+    <img src="images/1.png" alt="Testing Screenshot 1">
+    <img src="images/backend_testing.png" alt="Testing Screenshot 2">
+  </div>
+</div>
+
+
+
+<div id="security-performance" class="section reveal">
+  <h2 class="section-title">Security & Performance</h2>
+
+  <div class="feature-grid">
+    <!-- Security Card -->
+    <div class="feature-card">
+      <h3>Security</h3>
+      <ul class="feature-list">
+        <li><strong>Data Encryption:</strong> AES (Advanced Encryption Standard) used for storing and transmitting sensitive card and transaction data securely.</li>
+        <li><strong>Frontend:</strong> 
+          <ul>
+            <li>JWT Tokens for user authentication</li>
+            <li>Protected Routes to restrict unauthorized access</li>
+            <li>Role-Based Access for different user permissions (e.g., admin, station officer, passenger)</li>
+          </ul>
+        </li>
+        <li><strong>Backend:</strong>
+          <ul>
+            <li>JWT Validation on all protected API endpoints</li>
+            <li>Role Permissions enforced through middleware</li>
+            <li>HTTPS APIs to ensure secure communication</li>
+          </ul>
+        </li>
+      </ul>
     </div>
 
+    <!-- Performance Card -->
+    <div class="feature-card">
+      <h3>Performance</h3>
+      <ul class="feature-list">
+        <li>Optimized API design for low-latency communication between frontend and backend.</li>
+        <li>Multicore processing in ESP32 for parallel tasks: RFID reading and GSM communication.</li>
+        <li>Offline data caching and sync mechanism for uninterrupted ticketing in poor network zones.</li>
+        <li>Efficient memory use in embedded devices (flash storage, dynamic allocation).</li>
+      </ul>
+    </div>
   </div>
-</section>
+</div>
 
-    
+<div id="project-end" class="end-section reveal">
+  <h2 class="end-title">Our Mission</h2>
+  <p class="end-description">
+    The RailLynk project is more than just a ticketing system, it’s a step toward smarter, safer, and more efficient public transportation. 
+    By combining secure RFID technology, real-time GPS tracking, and a robust backend system, we aim to deliver a reliable solution for both passengers and railway operators.
+  </p>
 
-    
-    <section id="team">
-        <div class="section-container">
-            <h2>Team</h2>
-            <div class="team-members">
-                <div class="team-member">
-                    <img src="sandalu.jpg" alt="Team Member 1">
-                    <h3>Sandalu Umayanga</h3>
-                    <p>E/20/284</p>
-                </div>
-                <div class="team-member">
-                    <img src="milinda.jpg" alt="Team Member 2">
-                    <h3>Milinda Perera</h3>
-                    <p>E/20/286</p>
-                </div>
-                <div class="team-member">
-                    <img src="nadeeka.jpg" alt="Team Member 3">
-                    <h3>Nadeeka Hansamali</h3>
-                    <p>E/20/078</p>
-                </div>
-                <div class="team-member">
-                    <img src="lashan.jpg" alt="Team Member 4">
-                    <h3>Lashan panavenna</h3>
-                    <p>E/20/279</p>
-                </div>
-            
-        </div>
-    </section>
-    
-    
+  <p class="end-description">
+    Our goal is to modernize the railway experience with automation, transparency, and connectivity, making travel seamless and accessible to all, even in remote areas with limited connectivity.
+  </p>
 
-    <footer>
-        <p>&copy; 2025 RailLink. All Rights Reserved.</p>
-    </footer>
+</div>
 
-    <script src="script.js"></script>
+
+<!-- Team Section -->
+<div id="team" class="team-section">
+  <h1 class="section-title">Team</h1>
+  <div class="team-members">
+    <div class="team-card reveal fade-in-left">
+      <img src="images/sandalu.jpg" alt="Member 1">
+      <h2 style="color: white;">Peiris T.M.S.U</h2>
+      <p>E/20/284</p>
+    </div>
+    <div class="team-card reveal fade-in-left">
+      <img src="images/milinda.jpg" alt="Member 2">
+      <h2 style="color: white;">Perera K.M.S</h2>
+      <p>E/20/286</p>
+    </div>
+        <div class="team-card reveal fade-in-right">
+      <img src="images/lashan.jpg" alt="Member 2">
+      <h2 style="color: white;">Panawennage L.S</h2>
+      <p>E/20/279</p>
+    </div>
+        <div class="team-card reveal fade-in-right">
+      <img src="images/nadeeka.jpg" alt="Member 2">
+      <h2 style="color: white;">Dissanayaka D.M.N.H</h2>
+      <p>E/20/078</p>
+    </div>
+</div>
+<!-- Supervisor Section -->
+<div class="supervisor-section reveal fade-in-up">
+  <h2 class="section-subtitle">Supervisor</h2>
+  <div class="supervisor-card">
+    <img src="images/Supervisor.png" alt="Supervisor">
+    <h3>Dr. Isuru Nawinne</h3>
+  </div>
+</div>
+
+<!-- Footer / End Section -->
+<footer class="footer-end">
+  <p>© 2025 RailLynk Project. Built with passion for a smarter Sri Lanka Railway.</p>
+</footer>
+
+
+
+
+<script src="script.js"></script>
 </body>
 </html>
