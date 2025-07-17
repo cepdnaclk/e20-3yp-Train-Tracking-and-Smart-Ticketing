@@ -16,7 +16,7 @@ import json
 from .helper import process_task_id_3
 from .mqtt_client import publish_message
 from django.utils.timezone import now
-from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location
+from .location_cache import set_latest_location, get_all_latest_locations, get_latest_location, clear_all_locations
 from .models import Passenger, Station, Card, TransportFees, Transaction, Recharge, Routes, Trains
 from .serializer import RouteSerializer, TrainSerializer, RechargeSerializer, TransactionSerializer, TransportFeesSerializer, PassengerSignupSerializer, StationSignupSerializer, AdminSignupSerializer, UserLoginSerializer, PassengerSerializer, StationSerializer, CardSerializer, PassengerSerializer,StationStatisticsSerializer
 import paho.mqtt.client as mqtt
@@ -668,9 +668,14 @@ class ReceiveLocationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        if request.data.get("action") == "clear":
+            clear_all_locations()
+            print("🚨 Cancel received: All Redis train location data cleared.")
+            return Response({"message": "All GPS data cleared"}, status=status.HTTP_200_OK)
+
         train_name = request.data.get("train_name")
         speed = request.data.get("speed")
-        latitude = request.data.get("latitude")   # changed here
+        latitude = request.data.get("latitude")   
         longitude = request.data.get("longitude")
 
         data = {

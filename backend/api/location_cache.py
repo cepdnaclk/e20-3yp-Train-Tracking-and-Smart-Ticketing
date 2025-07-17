@@ -18,3 +18,8 @@ def get_latest_location(train_name):
     if data:
         return json.loads(data)
     return None
+
+def clear_all_locations():
+    keys = r.keys('*')
+    for key in keys:
+        r.delete(key)
