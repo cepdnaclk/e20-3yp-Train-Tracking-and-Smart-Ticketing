@@ -100,9 +100,24 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    S_station_name = serializers.SerializerMethodField()
+    E_station_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Transaction
-        fields = '__all__'
+        fields = ['id', 'card_num', 'amount', 'date', 'S_station', 'E_station', 'S_station_name', 'E_station_name']
+
+    def get_S_station_name(self, obj):
+        if obj.S_station:
+            station = Station.objects.filter(station_ID=obj.S_station).first()
+            return station.station_name if station else obj.S_station
+        return None
+
+    def get_E_station_name(self, obj):
+        if obj.E_station:
+            station = Station.objects.filter(station_ID=obj.E_station).first()
+            return station.station_name if station else obj.E_station
+        return None
 
 
 class RechargeSerializer(serializers.ModelSerializer):
