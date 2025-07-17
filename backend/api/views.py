@@ -717,16 +717,15 @@ class MqttDataView(APIView):
                 amount = data.get("amount")
                 start = data.get("start")
                 end = data.get("end")
-                result = "same station"
-                if amount < 0:
-                    new_data = {
-                        "nic" : nic,
-                        "amount" : amount,
-                        "end" : end,
-                        "start" : start,
-                    }
+            
+                new_data = {
+                    "nic" : nic,
+                    "amount" : amount,
+                    "end" : end,
+                    "start" : start,
+                }
 
-                    result = process_task_id_3(new_data)
+                result = process_task_id_3(new_data)
                 print("[MQTT Response]", result)
 
         except Exception as e:
