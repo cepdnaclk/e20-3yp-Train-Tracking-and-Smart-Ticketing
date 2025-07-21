@@ -34,6 +34,7 @@
         <li><a href="#software">Software</a></li>
       </ul>
     </li>
+    
     <li><a href="#security-performance">Security & Performance</a></li>
     <li><a href="#team">Team</a></li>
   </ul>
@@ -106,7 +107,7 @@ Provides passengers and station operators with accurate, live updates on train p
           </div>
 
           <div>
-          <img src="images/icon5.jpeg" class="feature-icon">
+          <img src="images/icon5.png" class="feature-icon">
   
             <div class="feature-title">Passenger Management</div>
             <div class="feature-text">
@@ -322,10 +323,11 @@ Provides passengers and station operators with accurate, live updates on train p
   </div>
 
 <div id="scanner-models" class="model-section">
-  <h2 class="section-title reveal">3D Models & Prototypes</h2>
-  <p class="section-subtitle">From design to reality – development of the scanner and door system.</p>
 
-  <!-- Scanner Prototypes -->
+ <section class="models-section">
+  <h2 class="section-title reveal">3D Models & Prototypes</h2>
+  <p class="section-subtitle reveal">From design to reality – development of the scanner and door system.</p>
+
   <div class="model-grid reveal">
     <div class="model-block">
       <img src="images/scanner1.png" alt="Scanner Prototype 1" class="model-image" />
@@ -336,39 +338,40 @@ Provides passengers and station operators with accurate, live updates on train p
     <div class="model-block">
       <img src="images/scanner3.png" alt="Scanner Prototype 3" class="model-image" />
     </div>
-        <div class="model-block">
-      <img src="images/door1.jpeg" alt="Scanner Prototype 3" class="model-image" />
+    <div class="model-block">
+      <img src="images/door1.jpeg" alt="Door Prototype" class="model-image" />
+    </div>
+  </div>
+</section>
+
+
+<!-- Final Product Section -->
+<section class="final-section">
+  <h2 class="section-title">Final Product</h2>
+  <div class="final-product-grid">
+    <!-- Smart Scanner -->
+    <div class="final-card">
+      <h3>Smart Scanner</h3>
+      <img src="images/Scanner.jpg" alt="Smart Scanner" class="final-image" />
+      <p>
+        The smart scanner allows passengers to tap in and out using an RFID smart card. It verifies card validity,
+        checks balance, logs entry/exit stations and timestamps, and updates fares securely, both online and offline.
+      </p>
     </div>
 
+    <!-- Electric Door -->
+    <div class="final-card">
+      <h3>Automated Electric Door</h3>
+      <img src="images/door2.jpeg" alt="Automated Electric Door" class="final-image" />
+      <p>
+        The electric door opens only for authorized passengers. It checks card validity and balance before unlocking.
+        At destination, it verifies trip completion and allows secure exit, ensuring controlled station access.
+      </p>
+    </div>
   </div>
-<h2 class="section-title reveal">Final Product</h2>
+</section>
 
-<!-- Final Scanner -->
-<div class="final-model reveal">
-  <h3>Final Product – Smart Scanner</h3>
-  <img src="images/Scanner.jpg" alt="Final Scanner" class="final-image" />
-  <p class="final-description">
-    The smart scanner allows passengers to tap in and out easily using an RFID smart card. 
-    When a passenger taps the card, the system reads secure data stored on the card such as 
-    the Card ID, balance. At the entry point, it checks if the card 
-    is authorized and if the balance is sufficient. Then it records the station ID and timestamp 
-    onto the card. At the exit station, the scanner calculates the fare, validates 
-    the trip, and updates the backend or stores the transaction in offline memory.
-  </p>
-</div>
 
-<!-- Final Electric Door -->
-<div class="final-model reveal">
-  <h3>Final Product – Automated Electric Door</h3>
-  <img src="images/door2.jpeg" alt="Real Door Image" class="final-image" />
-  <p class="final-description">
-    The electric door unlocks only if the passenger is authorized. During entry, the system verifies 
-    the smart card’s validity and checks whether the starting balance is sufficient for the journey. 
-    If these conditions are met, the door opens automatically to allow boarding. At the destination, 
-    when the passenger taps out, the door unlocks again after verifying the trip and authorizing the 
-    exit based on valid travel data. This ensures secure and controlled access.
-  </p>
-</div>
 
 </div>
 
@@ -378,71 +381,84 @@ Provides passengers and station operators with accurate, live updates on train p
   <p class="section-subtitle reveal">
     Our smart railway web app is designed to streamline operations, simplify travel, and ensure seamless interaction between Passengers, Station Officers, and Admins. Each user role gets a dedicated dashboard tailored to their tasks and responsibilities.
   </p>
+<div class="software-cards">
 
-  <div class="software-cards">
-    
-    <!-- Passenger Panel -->
-    <div class="software-card reveal">
-      <h2>Passenger ashboard</h2>
-      <p class="card-description">
-        Passengers can register and log in to manage their journey effortlessly using a smart card-based system.
+  <!-- Passenger Dashboard -->
+  <div class="software-card flex-card">
+    <div class="software-text">
+      <h2 class="dashboard-title">Passenger Dashboard</h2>
+      <p class="dashboard-subtitle">
+        Easily manage your journey with a smart card-enabled system designed for convenience.
       </p>
-      <ul>
-        <li>Login securely and edit personal profile</li>
-        <li>View recharge history and transaction summaries</li>
-        <li>Search for trains to a specific destination and view real-time location</li>
-        <li>Track journey history based on smart card activity</li>
-        <li>Recharge smart cards using Google Pay integration</li>
+      <ul class="dashboard-features">
+        <li>Secure login and profile management</li>
+        <li>View recharge history and transactions</li>
+        <li>Real-time train search and location tracking</li>
+        <li>Journey history via smart card usage</li>
+        <li>Recharge with Google Pay</li>
       </ul>
-    <img src="images/Passenger.png" alt="Passenger Icon" class="software-icon" />
     </div>
+    <div class="software-image">
+      <img src="images/Passenger.png" alt="Passenger Dashboard" />
+    </div>
+  </div>
 
-    <!-- Station Panel -->
-    <div class="software-card reveal">
-      <h2>Station Dashboard</h2>
-      <p class="card-description">
+  <!-- Station Dashboard -->
+  <div class="software-card flex-card">
+    <div class="software-text">
+      <h2 class="dashboard-title">Station Dashboard</h2>
+      <p class="dashboard-subtitle">
         Station staff can access powerful tools to register passengers, monitor activity, and view daily station performance.
       </p>
-      <ul>
-        <li>Register new passengers and delete accounts as needed</li>
-        <li>View daily stats including issued cards and passenger counts</li>
-        <li>Monitor train arrivals and departures in real-time</li>
-        <li>Analyze graphs showing station-to-station passenger flow</li>
-        <li>Access operational insights for efficient station management</li> 
+      <ul class="dashboard-features">
+        <li>Register new passengers and delete accounts</li>
+        <li>View daily stats and passenger counts</li>
+        <li>Monitor real-time train arrivals and departures</li>
+        <li>Analyze passenger flow graphs</li>
+        <li>Operational insights for better management</li>
       </ul>
-      <img src="images/station.png" alt="Station Icon" class="software-icon" />
     </div>
+    <div class="software-image">
+      <img src="images/station.png" alt="Station Dashboard" />
+    </div>
+  </div>
 
-    <!-- Admin Panel -->
-    <div class="software-card reveal">
-      <h2>Admin Controls</h2>
-      <p class="card-description">
+  <!-- Admin Dashboard -->
+  <div class="software-card flex-card">
+    <div class="software-text">
+      <h2 class="dashboard-title">Admin Controls</h2>
+      <p class="dashboard-subtitle">
         Admins oversee the entire system: register stations, analyze revenue, and monitor all stations and train movement live.
       </p>
-      <ul>
-        <li>Register both passengers and station operators</li>
-        <li>Generate and review monthly revenue reports</li>
-        <li>Access a live train tracking system with real-time maps</li>
-        <li>View station usage statistics and analytics</li>
-        <li>Oversee entire system operations and status</li>
+      <ul class="dashboard-features">
+        <li>Register passengers and operators</li>
+        <li>Review monthly revenue reports</li>
+        <li>Access live train tracking maps</li>
+        <li>Analyze station usage and statistics</li>
+        <li>Oversee full system operations</li>
       </ul>
-      <img src="images/admin.png" alt="Admin Icon" class="software-icon" />
     </div>
-
+    <div class="software-image">
+      <img src="images/admin.png" alt="Admin Dashboard" />
+    </div>
   </div>
+
+</div>
+
 </section>
 
 <!-- Train Tracking Section -->
 <section id="train-tracking" class="section reveal">
   <h2 class="section-title">Train Tracking</h2>
   
-  <div class="video-container">
-    <img src="images/traking.png" alt="Train Tracking Demo" class="tracking-image" />
-    
-    <p class="video-description">
-      This demo showcases real-time train tracking using GPS and GSM modules, integrated with our backend system.
-    </p>
-  </div>
+<div class="tracking-demo">
+  <h2 class="section-title">Live Train Tracking Demo</h2>
+  <video controls class="tracking-video">
+    <source src="images/train_tracking_demo.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 </section>
 
 
